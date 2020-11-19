@@ -1,13 +1,12 @@
 import pandas as pd
 import pymongo
-import ast
 
 class company_data:
-
     """company_data."""
 
     def __init__(self) -> None:
-        """__init__.
+        """
+        __init__.
         
         Make a connection with database.
         Create inner variable with stock_type.
@@ -27,7 +26,8 @@ class company_data:
         return None
 
     def __del__(self) -> None:
-        """__del__.
+        """
+        __del__.
         
         Disconnect with database.
         :rtype: None
@@ -36,7 +36,8 @@ class company_data:
         return None
 
     def __crawling_stock(self, stock_type: str) -> pd.DataFrame:
-        """__crawling_stock.
+        """
+        __crawling_stock.
         
         Crawling companies from krx.
         :param stock_type: Want to crawling. "kospi"/"kosdaq"
@@ -51,7 +52,8 @@ class company_data:
         return df
 
     def __get_download(self, stock_type: str) -> pd.DataFrame:
-        """__get_download.
+        """
+        __get_download.
         
         Download specific market datas.
         :param stock_type: Want to download. "kospi"/"kosdaq"
@@ -64,7 +66,8 @@ class company_data:
         return df
 
     def __df_to_json(self, data):
-        """__df_to_json.
+        """
+        __df_to_json.
         
         Convert dataframe to json.
         :param data: Want to convert.
@@ -80,7 +83,8 @@ class company_data:
         return bson
 
     def __rename_df(self, data: pd.DataFrame) -> pd.DataFrame:
-        """__rename_df.
+        """
+        __rename_df.
         
         Rename dataframe column kor to eng.
         :param data: Want to rename
@@ -93,7 +97,8 @@ class company_data:
         return renamed
 
     def __refresh_col(self, market_name: str) -> None:
-        """__refresh_col.
+        """
+        __refresh_col.
         
         Refresh database if datas were not exist or crashed.
         :param market_name: Want to refresh. "kospi"/"kosdaq"
@@ -114,7 +119,8 @@ class company_data:
         return False
 
     def get_company_list(self) -> list:
-        """get_company_list.
+        """
+        get_company_list.
         
         Get all companies listed at kospi&kosdaq.
         :rtype: list
