@@ -1,17 +1,15 @@
-import pandas as pd
 import pymongo
+import pandas as pd
 
 class company_data:
-    """
-    company_data.
-    """
+    """company_data."""
 
     def __init__(self) -> None:
         """__init__.
-        company_data initializer.
 
         Make a connection with database.
         Create inner variable with stock_type.
+        
         :rtype: None
         """
         host_info = open("host.txt", "r")
@@ -29,9 +27,9 @@ class company_data:
 
     def __del__(self) -> None:
         """__del__.
-        company_data destructor.
 
         Disconnect with database.
+        
         :rtype: None
         """
         self.connection.close()
@@ -39,9 +37,9 @@ class company_data:
 
     def __crawling_stock(self, stock_type: str) -> pd.DataFrame:
         """__crawling_stock.
-        Crawling datas.
 
         Crawling companies from krx.
+        
         :param stock_type: Want to crawling. "kospi"/"kosdaq"
         :type stock_type: str
         :rtype: pd.DataFrame
@@ -55,9 +53,9 @@ class company_data:
 
     def __get_download(self, stock_type: str) -> pd.DataFrame:
         """__get_download.
-        Download datas.
 
         Download specific market datas.
+        
         :param stock_type: Want to download. "kospi"/"kosdaq"
         :type stock_type: str
         :rtype: pd.DataFrame
@@ -69,9 +67,9 @@ class company_data:
 
     def __df_to_json(self, data: pd.DataFrame) -> list:
         """__df_to_json.
-        Json convertor.
 
         Convert dataframe to json.
+        
         :param data: Want to convert.
         """
         bson = []
@@ -86,9 +84,9 @@ class company_data:
 
     def __rename_df(self, data: pd.DataFrame) -> pd.DataFrame:
         """__rename_df.
-        Renaming dataframe.
         
         Rename dataframe column kor to eng.
+        
         :param data: Want to rename
         :type data: pd.DataFrame
         :rtype: pd.DataFrame
@@ -100,9 +98,9 @@ class company_data:
 
     def __refresh_col(self, market_name: str) -> None:
         """__refresh_col.
-        Refresh database.
         
         Refresh database if datas were not exist or crashed.
+        
         :param market_name: Want to refresh. "kospi"/"kosdaq"
         :type market_name: str
         :rtype: None
@@ -122,9 +120,9 @@ class company_data:
 
     def get_company_list(self) -> list:
         """get_company_list.
-        Get companies.
 
         Get all companies listed at kospi&kosdaq.
+        
         :rtype: list
         """
         self.__get_download("kospi")
