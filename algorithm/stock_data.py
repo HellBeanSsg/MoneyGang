@@ -1,19 +1,16 @@
 import pandas as pd
-import os
 import pymongo
-import json
 
 
-##
-# @brief Get companies listed at kospi&kosdaq
-# If there were no datas in db, then crawling from krx
 class company_data:
-    ##
-    # @brief Make a connection with database.
-    # Create inner variable with stock_type
-    #
-    # @return None
+    """company_data."""
+
     def __init__(self) -> None:
+        """__init__.
+        Make a connection with database.
+        Create inner variable with stock_type.
+        :rtype: None
+        """
         host_info = open("host.txt", "r")
         host, port = host_info.readlines()
         self.connection = pymongo.MongoClient("mongodb://" + host, int(port))
@@ -27,21 +24,21 @@ class company_data:
         host_info.close()
         return None
 
-    ##
-    # @brief Disconnect with database
-    #
-    # @return None
     def __del__(self) -> None:
+        """__del__.
+        Disconnect with database.
+        :rtype: None
+        """
         self.connection.close()
         return None
 
-    ##
-    # @brief Crawling companies from krx.
-    #
-    # @param stock_type Want to crawling: "kospi" or "kosdaq"
-    #
-    # @return All companies listed at kwx.
     def __crawling_stock(self, stock_type: str) -> pd.DataFrame:
+        """__crawling_stock.
+        Crawling companies from krx.
+        :param stock_type: Want to crawling. "kospi"/"kosdaq"
+        :type stock_type: str
+        :rtype: pd.DataFrame
+        """
         market_type = self.stock_type[stock_type]["market_type"]
         download_link = "http://kind.krx.co.kr/corpgeneral/corpList.do"
         download_link = download_link + "?method=download"
@@ -49,25 +46,23 @@ class company_data:
         df = pd.read_html(download_link, header=0)[0]
         return df
 
-    ##
-    # @brief Download specific market datas.
-    #
-    # @param stock_type Want to download: "kospi" or "kosdaq".
-    #
-    # @return Market datas.
     def __get_download(self, stock_type: str) -> pd.DataFrame:
+        """__get_download.
+        Download specific market datas.
+        :param stock_type: Want to download. "kospi"/"kosdaq"
+        :type stock_type: str
+        :rtype: pd.DataFrame
+        """
         code = self.stock_type[stock_type]["code"]
         df = self.__crawling_stock(stock_type)
         df.종목코드 = df.종목코드.map(("{:06d}." + code).format)
         return df
 
-    ##
-    # @brief Convert dataframe to json.
-    #
-    # @param data Want to convert.
-    #
-    # @return List composed with json datas.
     def __df_to_json(self, data):
+        """__df_to_json.
+        Convert dataframe to json.
+        :param data: Want to convert.
+        """
         bson = []
         for code in data["code"]:
             body = {}
@@ -78,25 +73,25 @@ class company_data:
             bson.append(body)
         return bson
 
-    ##
-    # @brief Renaming Dataframe column kor to eng.
-    #
-    # @param pd.DataFrame Want to rename.
-    #
-    # @return Renamed Dataframe.
     def __rename_df(self, data: pd.DataFrame) -> pd.DataFrame:
+        """__rename_df.
+        Rename dataframe column kor to eng.
+        :param data: Want to rename
+        :type data: pd.DataFrame
+        :rtype: pd.DataFrame
+        """
         compaction = data.loc[:, ["회사명", "종목코드", "상장일"]]
         columns = {"회사명": "name", "종목코드": "code", "상장일": "list_date"}
         renamed = compaction.rename(columns=columns)
         return renamed
 
-    ##
-    # @brief Refresh database if datas were not exist or crashed.
-    #
-    # @param market_name Want to refresh: "kospi" or "kosdaq".
-    #
-    # @return 1 if refresh or 0.
     def __refresh_col(self, market_name: str) -> None:
+        """__refresh_col.
+        Refresh database if datas were not exist or crashed.
+        :param market_name: Want to refresh. "kospi"/"kosdaq"
+        :type market_name: str
+        :rtype: None
+        """
         col = eval("self." + market_name + "_col")
         if col.count() < 1000:
             col.delete_many({})
@@ -107,11 +102,11 @@ class company_data:
             return True
         return False
 
-    ##
-    # @brief Get all companies listed at kospi&kosdaq.
-    #
-    # @return companies list listed at kospi&kosdaq.
     def get_company_list(self) -> list:
+        """get_company_list.
+        Get all companies listed at kospi&kosdaq.
+        :rtype: list
+        """
         self.__get_download("kospi")
         self.__refresh_col("kospi")
         self.__refresh_col("kosdaq")
