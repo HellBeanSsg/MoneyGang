@@ -1,12 +1,14 @@
 import pandas as pd
 import pymongo
-
+import ast
 
 class company_data:
+
     """company_data."""
 
     def __init__(self) -> None:
         """__init__.
+        
         Make a connection with database.
         Create inner variable with stock_type.
         :rtype: None
@@ -26,6 +28,7 @@ class company_data:
 
     def __del__(self) -> None:
         """__del__.
+        
         Disconnect with database.
         :rtype: None
         """
@@ -34,6 +37,7 @@ class company_data:
 
     def __crawling_stock(self, stock_type: str) -> pd.DataFrame:
         """__crawling_stock.
+        
         Crawling companies from krx.
         :param stock_type: Want to crawling. "kospi"/"kosdaq"
         :type stock_type: str
@@ -48,6 +52,7 @@ class company_data:
 
     def __get_download(self, stock_type: str) -> pd.DataFrame:
         """__get_download.
+        
         Download specific market datas.
         :param stock_type: Want to download. "kospi"/"kosdaq"
         :type stock_type: str
@@ -60,6 +65,7 @@ class company_data:
 
     def __df_to_json(self, data):
         """__df_to_json.
+        
         Convert dataframe to json.
         :param data: Want to convert.
         """
@@ -75,6 +81,7 @@ class company_data:
 
     def __rename_df(self, data: pd.DataFrame) -> pd.DataFrame:
         """__rename_df.
+        
         Rename dataframe column kor to eng.
         :param data: Want to rename
         :type data: pd.DataFrame
@@ -87,12 +94,16 @@ class company_data:
 
     def __refresh_col(self, market_name: str) -> None:
         """__refresh_col.
+        
         Refresh database if datas were not exist or crashed.
         :param market_name: Want to refresh. "kospi"/"kosdaq"
         :type market_name: str
         :rtype: None
         """
-        col = eval("self." + market_name + "_col")
+        if market_name == "kospi":
+            col = self.kospi_col
+        elif market_name == "kosdaq":
+            col = self.kosdaq_col
         if col.count() < 1000:
             col.delete_many({})
             df = self.__get_download(market_name)
@@ -104,6 +115,7 @@ class company_data:
 
     def get_company_list(self) -> list:
         """get_company_list.
+        
         Get all companies listed at kospi&kosdaq.
         :rtype: list
         """
