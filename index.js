@@ -47,10 +47,10 @@ app.get("/login/google/callback",
         res.redirect("/success");
 });
 
-app.get("/logout", ((req, res) =>{
+app.get("/logout", ((req, res) => {
     req.session = null;
     res.clearCookie("session");
     res.redirect("/");
-}))
+}));
 
 app.listen(8080);
