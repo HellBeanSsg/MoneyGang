@@ -17,12 +17,9 @@ app.use(cookieSession({
         keys: ["key1", "key2"]
 }));
 
-
 const isLoggedIn = (req, res, next) => {
-    if (req.user) {
-        next();
-    } else {
-        res.send("Login first!");
+    if (!req.user) {
+        return true;
     }
 }; // It it necessary?
 
@@ -36,7 +33,8 @@ app.get("/failed", ((req, res) =>
     res.send("You Failed to log in")));
 
 app.get("/success", function (req, res, next){
-    isLoggedIn(req, res, next);
+    var flag = isLoggedIn(req, res, next);
+    flag ? res.send("Login First!") :
     res.send(`Welcome! mr ${req.user.displayName}!`);
 });
 
