@@ -47,7 +47,7 @@ app.set("jwt-secret", config.secret);
 app.use(cookieSession({
     name : "session",
     keys  : ["key1", "value2"]
-}))
+}));
 
 const isLoggedIn = (req) => {
     if (!req.user) {

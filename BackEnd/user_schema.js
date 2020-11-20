@@ -23,7 +23,7 @@ User.statics.findOneByUsername = function(username) {
     return this.findOne({
         username
     }).exec();
-}
+};
 
 
 // verify the password of the User documment
