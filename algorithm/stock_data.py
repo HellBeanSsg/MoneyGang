@@ -92,7 +92,7 @@ class company_data:
 
     def __refresh_col(self, market_name: str) -> None:
         """__refresh_col.
-        
+
         Refresh database if datas were not exist or crashed.
         :param market_name: Want to refresh. "kospi"/"kosdaq"
         :type market_name: str
