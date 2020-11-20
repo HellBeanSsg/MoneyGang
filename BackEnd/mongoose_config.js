@@ -1,4 +1,4 @@
-const mongo = require("./MongoDB.json");
+const mongo = require("./MongoDB");
 
 module.exports = {
     //"secret": mongo.mong.secret,

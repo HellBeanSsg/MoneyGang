@@ -9,7 +9,7 @@ const passport      = require("passport");
 const cookieSession = require("cookie-session");
 const Session       = require("express-session");
 const mongoose      = require("mongoose");
-require("./passport");
+require("./passport_config");
 
 /*====================================
        Load The Configuration
