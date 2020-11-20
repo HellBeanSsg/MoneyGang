@@ -7,9 +7,9 @@ const cors          = require("cors");
 const bodyparser    = require("body-parser");
 const passport      = require("passport");
 const cookieSession = require("cookie-session");
-const Session       = require("express-session");
 const mongoose      = require("mongoose");
 require("./passport_config");
+// const Session       = require("express-session");
 
 /*====================================
        Load The Configuration
@@ -21,10 +21,8 @@ const port   = process.env.port || 8080;
 
 mongoose.connect(config.mongodbUri);    //test
 const DB = mongoose.connection;         //test
-DB.on("error", console.error);          //test
-DB.once("open", function(){             //test
-    console.log("Connected to mongoDB") //test
-});                                     //test
+// DB.on("error");                         //test
+// DB.once("open");                        //test
 
 
 
@@ -41,7 +39,7 @@ const app = express();
 
 app.use(bodyparser.urlencoded({ extended : false }));
 app.use(bodyparser.json());
-app.use(cors())
+app.use(cors());
 
 // set the secret key variable for jwt.
 app.set("jwt-secret", config.secret);
@@ -69,7 +67,7 @@ app.get("/failed", ((req, res) =>
     res.send("You Failed to log in")));
 
 // Login success page
-app.get("/success", function (req, res, next){
+app.get("/success", function (req, res){
     let flag = isLoggedIn(req);
     flag ? res.send("Login First!") :
         res.send(`Welcome! mr ${req.user.displayName}!`);
