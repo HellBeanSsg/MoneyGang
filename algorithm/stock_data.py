@@ -9,7 +9,6 @@ class company_data:
 
         Make a connection with database.
         Create inner variable with stock_type.
-        
         :rtype: None
         """
         host_info = open("host.txt", "r")
@@ -29,7 +28,6 @@ class company_data:
         """__del__.
 
         Disconnect with database.
-        
         :rtype: None
         """
         self.connection.close()
@@ -39,7 +37,6 @@ class company_data:
         """__crawling_stock.
 
         Crawling companies from krx.
-        
         :param stock_type: Want to crawling. "kospi"/"kosdaq"
         :type stock_type: str
         :rtype: pd.DataFrame
@@ -55,7 +52,6 @@ class company_data:
         """__get_download.
 
         Download specific market datas.
-        
         :param stock_type: Want to download. "kospi"/"kosdaq"
         :type stock_type: str
         :rtype: pd.DataFrame
@@ -69,7 +65,6 @@ class company_data:
         """__df_to_json.
 
         Convert dataframe to json.
-        
         :param data: Want to convert.
         """
         bson = []
@@ -86,7 +81,6 @@ class company_data:
         """__rename_df.
         
         Rename dataframe column kor to eng.
-        
         :param data: Want to rename
         :type data: pd.DataFrame
         :rtype: pd.DataFrame
@@ -100,7 +94,6 @@ class company_data:
         """__refresh_col.
         
         Refresh database if datas were not exist or crashed.
-        
         :param market_name: Want to refresh. "kospi"/"kosdaq"
         :type market_name: str
         :rtype: None
@@ -122,7 +115,6 @@ class company_data:
         """get_company_list.
 
         Get all companies listed at kospi&kosdaq.
-        
         :rtype: list
         """
         self.__get_download("kospi")
