@@ -1,0 +1,6 @@
+{
+  "mong": {
+    "secret":"SeCrEtKeYfOrHaShInG",
+    "mongodb":"mongodb://54.86.223.236:27017"
+  }
+}

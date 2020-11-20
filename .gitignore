@@ -20,6 +20,7 @@
 ### Node ###
 google.json
 .idea
+MongoDB.json
 # Logs
 logs
 *.log

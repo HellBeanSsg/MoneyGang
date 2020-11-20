@@ -1,4 +1,5 @@
 const passport       = require("passport");
+const passportjwt    = require("passport-jwt");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const googleData     = require("./google.json");
 const ID             = googleData.web.client_id;
