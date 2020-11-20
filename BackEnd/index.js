@@ -20,7 +20,7 @@ const port   = process.env.port || 8080;
 
 
 mongoose.connect(config.mongodbUri);    //test
-const DB = mongoose.connection;         //test
+// const DB = mongoose.connection;         //test
 // DB.on("error");                         //test
 // DB.once("open");                        //test
 
