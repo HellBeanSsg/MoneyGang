@@ -79,7 +79,7 @@ class company_data:
 
     def __rename_df(self, data: pd.DataFrame) -> pd.DataFrame:
         """__rename_df.
-        
+
         Rename dataframe column kor to eng.
         :param data: Want to rename
         :type data: pd.DataFrame
