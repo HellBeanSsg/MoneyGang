@@ -18,6 +18,9 @@
 .nfs*
 
 ### Node ###
+BackEnd/google.json
+.idea
+BackEnd/MongoDB.json
 # Logs
 logs
 *.log
