@@ -12,6 +12,7 @@ class CallbackDriver{
 	quoteList: Array<number>;
 	quoteListIdx: number;
 	quoteAmountAvg: number;
+	debug: number;
 
 	constructor(){
 		this.myDriver = new BitmexDriver(this);
@@ -19,6 +20,13 @@ class CallbackDriver{
 		this.lastPrice = 0;
 		this.lastValue = 0;
 		this.quoteListIdx = 0;
+		/*
+		**@ 0: Print nothing
+		**@ 1: Print orderBook
+		**@ 2: Print qouteBook
+		**@ 3: Print input data from orderBookInfo
+		*/
+		this.debug = 1;
 		this.orderBook = {};
 		this.quoteBook = {};
 		this.quoteList = new Array<number>(10000);
@@ -36,6 +44,10 @@ class CallbackDriver{
 		let size:  number;
 		let quote:  number;
 		let row:   {};
+		if (this.debug == 3) {
+			console.clear();
+			console.log(data);
+		}
 		for (var i=0; i<data.length; i++){
 			row = data[i];
 			price = row['price'];
@@ -51,7 +63,9 @@ class CallbackDriver{
 		}
 		let sorted: number[][] = this.sortDictByKey(this.orderBook);
 
-		this.printDriver.printOrderBook(sorted, this.lastPrice, this.lastValue);
+		if (this.debug == 1) {
+			this.printDriver.printOrderBook(sorted, this.lastPrice, this.lastValue);
+		}
 	}
 
 
@@ -69,7 +83,9 @@ class CallbackDriver{
 						this.resetQuoteBook();
 					}
 				}
-				//this.printDriver.printOrderBook(this.sortDictByKey(this.quoteBook), price, quote);
+				if (this.debug == 2) {
+					this.printDriver.printOrderBook(this.sortDictByKey(this.quoteBook), price, quote);
+				}
 				res(true);
 			});
 		}

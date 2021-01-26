@@ -10,6 +10,13 @@ var CallbackDriver = /** @class */ (function () {
         this.lastPrice = 0;
         this.lastValue = 0;
         this.quoteListIdx = 0;
+        /*
+        **@ 0: Print nothing
+        **@ 1: Print orderBook
+        **@ 2: Print qouteBook
+        **@ 3: Print input data from orderBookInfo
+        */
+        this.debug = 1;
         this.orderBook = {};
         this.quoteBook = {};
         this.quoteList = new Array(10000);
@@ -23,6 +30,10 @@ var CallbackDriver = /** @class */ (function () {
         var size;
         var quote;
         var row;
+        if (this.debug == 3) {
+            console.clear();
+            console.log(data);
+        }
         for (var i = 0; i < data.length; i++) {
             row = data[i];
             price = row['price'];
@@ -31,14 +42,16 @@ var CallbackDriver = /** @class */ (function () {
                 quote = this.orderBook[price] - size;
             }
             else {
-                quote = 0;
+                quote = size;
             }
             this.orderBook[price] = size;
             if (quote > 1000)
                 this.addQuote(price, quote);
         }
         var sorted = this.sortDictByKey(this.orderBook);
-        this.printDriver.printOrderBook(sorted, this.lastPrice, this.lastValue);
+        if (this.debug == 1) {
+            this.printDriver.printOrderBook(sorted, this.lastPrice, this.lastValue);
+        }
     };
     CallbackDriver.prototype.addQuote = function (price, quote) {
         var _this = this;
@@ -58,7 +71,9 @@ var CallbackDriver = /** @class */ (function () {
                         _this.resetQuoteBook();
                     }
                 }
-                //this.printDriver.printOrderBook(this.sortDictByKey(this.quoteBook), price, quote);
+                if (_this.debug == 2) {
+                    _this.printDriver.printOrderBook(_this.sortDictByKey(_this.quoteBook), price, quote);
+                }
                 res(true);
             });
         }

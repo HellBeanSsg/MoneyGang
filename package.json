@@ -7,11 +7,16 @@
   },
   "author": "MoneyGang",
   "dependencies": {
+    "bitmex-realtime-api": "^0.5.0",
     "cookie-parser": "~1.4.4",
     "debug": "^4.2.0",
     "ejs": "^3.1.5",
     "express": "^4.17.1",
+    "fs": "0.0.1-security",
     "http-errors": "^1.8.0",
     "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "@types/node": "^14.14.22"
   }
 }

@@ -11,7 +11,8 @@ class PrintDriver{
 			
 			msg = this.formatting(elem, value, tradePrice);
 			color = this.getColor(tradePrice);
-			console.log(color, msg, this.background);
+			
+			//console.log(color, msg, this.background);
 		});
 	}
 

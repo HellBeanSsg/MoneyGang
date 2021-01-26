@@ -1,6 +1,6 @@
-import BitMEXClient = require("bitmex-realtime-api")
+import * as BitMEXClient from "bitmex-realtime-api"
 import { CallbackDriver } from "./callback-driver"
-import fs = require('fs')
+import  * as fs from 'fs'
 
 export
 class BitmexDriver{
@@ -17,7 +17,6 @@ class BitmexDriver{
 			callbackDriver.orderBookInfo(data);
 		});
 	}
-
 
 	private getKey(): string {
 		const keyFile = fs.readFileSync('key.txt');
