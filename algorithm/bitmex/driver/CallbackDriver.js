@@ -45,18 +45,16 @@ class CallbackDriver {
             this.quoteList[this.quoteListIdx] = quote;
             this.quoteListIdx = (this.quoteListIdx + 1) % 10000;
         }
-        else {
-            if (price in this.quoteBook) {
-                this.quoteBook[price].push(quote);
-            }
-            else {
-                this.quoteBook[price] = [quote];
-                if (Object.keys(this.quoteBook).length > 40) {
-                    this.resetQuoteBook();
-                }
-            }
-            //this.printDriver.printOrderBook(this.sortDictByKey(this.quoteBook), price, quote);
+        else if (price in this.quoteBook) {
+            this.quoteBook[String(price)].push(quote);
         }
+        else {
+            this.quoteBook[String(price)] = [quote];
+        }
+        if (Object.keys(this.quoteBook).length > 40) {
+            this.resetQuoteBook();
+        }
+        //this.printDriver.printOrderBook(this.sortDictByKey(this.quoteBook), price, quote);
     }
     resetQuoteBook() {
         for (let i = 0; i < 10; ++i) {
@@ -69,7 +67,7 @@ class CallbackDriver {
                 rowLength = elem[1].length;
                 avg += rowLength;
                 if (rowLength > this.quoteAmountAvg && this.quoteAmountAvg > 4) {
-                    delete this.quoteBook[elem[0]];
+                    delete this.quoteBook[String(elem[0])];
                     return;
                 }
                 if (rowLength <= min) {
@@ -81,8 +79,8 @@ class CallbackDriver {
                 }
             });
             this.quoteAmountAvg = avg / sorted.length;
-            if (Math.max(this.quoteBook[key]) < 1000000) {
-                delete this.quoteBook[key];
+            if (Math.max(this.quoteBook[String(key)]) < 1000000) {
+                delete this.quoteBook[String(key)];
             }
         }
     }
