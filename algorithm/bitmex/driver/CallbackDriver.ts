@@ -9,8 +9,6 @@ class CallbackDriver{
 	lastValue: number;
 	orderBook: {};
 	quoteBook: {};	
-	quoteList: Array<number>;
-	quoteListIdx: number;
 	quoteAmountAvg: number;
 
 	constructor(){
@@ -18,11 +16,9 @@ class CallbackDriver{
 		this.printDriver = new PrintDriver();
 		this.lastPrice = 0;
 		this.lastValue = 0;
-		this.quoteListIdx = 0;
 		this.quoteAmountAvg = 40;
 		this.orderBook = {};
 		this.quoteBook = {};
-		this.quoteList = new Array<number>(10000);
 	}
 
 
@@ -44,7 +40,7 @@ class CallbackDriver{
 			} else {
 				quote = size;
 			}
-			this.orderBook[price] = size;
+			this.orderBook[String(price)] = size;
 			if (quote > 1000) {
 				this.addQuote(price, quote);
 			}
@@ -56,10 +52,7 @@ class CallbackDriver{
 
 
 	addQuote(price: number, quote: number){
-		if (!(quote in this.quoteList) && (quote < 1000000)){
-			this.quoteList[this.quoteListIdx] = quote;
-			this.quoteListIdx = (this.quoteListIdx + 1) % 10000;
-		} else if (price in this.quoteBook) {
+		if (price in this.quoteBook) {
 			this.quoteBook[String(price)].push(quote);
 		} else {
 				this.quoteBook[String(price)] = [quote];
@@ -78,7 +71,7 @@ class CallbackDriver{
 			let rowLength: number;
 			let avg: number = 0;
 			let sorted = this.sortDictByKey(this.quoteBook);
-			sorted.forEach((elem)=>{
+			sorted.forEach((elem) => {
 				rowLength = elem[1].length;
 				avg += rowLength
 				if (rowLength > this.quoteAmountAvg && this.quoteAmountAvg > 4){
@@ -104,7 +97,7 @@ class CallbackDriver{
 
 	sortDictByKey(data: {}): any{
 		let sorted: any = Object.keys(data).map(function(key) {
-		  return [key, data[key]];
+		  return [key, data[String(key)]];
 		});
 
 		sorted.sort(function(first, second) {

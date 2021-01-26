@@ -10,10 +10,10 @@ class BitmexDriver{
 	constructor(callbackDriver: CallbackDriver){
 		const key = this.getKey();
 		this.BitmexClient = new BitMEXClient({apiKeyID: key});
-		this.BitmexClient.addStream("XBTUSD", "trade", (data: [], symbol: string) => {
+		this.BitmexClient.addStream("XBTUSD", "trade", (data: []) => {
 			callbackDriver.tradeInfo(data[data.length-1]);
 		});
-		this.BitmexClient.addStream("XBTUSD", "orderBookL2_25", (data: [], symbol: string) => {
+		this.BitmexClient.addStream("XBTUSD", "orderBookL2_25", (data: []) => {
 			callbackDriver.orderBookInfo(data);
 		});
 	}
