@@ -4,30 +4,30 @@ class PrintDriver{
 
 
 	printOrderBook(book: any, price: number, value: number): void{
-		console.clear();
+		//console.clear();
 		book.forEach((elem)=>{
 			let color: String;
 			let msg: String;
-			let tradePrice: boolean = (elem[0] == price);
+			let tradePrice: boolean = (elem[0] === price);
 			
 			msg = this.formatting(elem, value, tradePrice);
 			color = this.getColor(tradePrice);
 			
-			console.log(color, msg, this.background);
+			//console.log(color, msg, this.background);
 		});
 	}
 
 
 	getColor(coloring: boolean): String{
 		if (coloring) { return "\x1b[31m"; }
-		else { return "\x1b[30m"; }
+		return "\x1b[30m";
 	}
 
 
 	formatting(row: number[], value: number, printValue: boolean): String{
 		let msg: String;
 		msg = row[0].toString().padEnd(10);
-		msg += ',';
+		msg += ",";
 		msg += row[1].toString().padEnd(10);
 		if (printValue) {
 			msg += value.toString().padStart(10);
@@ -37,7 +37,7 @@ class PrintDriver{
 	}
 
 
-	printQuoteBook(book: Array<Array<any>>): void{
-	;
+	printQuoteBook(book: Array<Array<any>>): number{
+		return 1;
 	}
 }

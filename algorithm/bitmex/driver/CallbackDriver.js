@@ -64,15 +64,12 @@ class CallbackDriver {
                     delete this.quoteBook[String(elem[0])];
                     return;
                 }
-                if (rowLength <= min) {
-                    if (rowLength == min && Math.random() > 0.5) {
-                        return;
-                    }
+                if (rowLength < min) {
                     min = rowLength;
                     key = elem[0];
                 }
             });
-            this.quoteAmountAvg = avg / sorted.length;
+            this.quoteAmountAvg = (avg / sorted.length);
             if (Math.max(this.quoteBook[String(key)]) < 1000000) {
                 delete this.quoteBook[String(key)];
             }

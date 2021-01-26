@@ -6,28 +6,26 @@ class PrintDriver {
         this.background = "\x1b[47m";
     }
     printOrderBook(book, price, value) {
-        console.clear();
+        //console.clear();
         book.forEach((elem) => {
             let color;
             let msg;
-            let tradePrice = (elem[0] == price);
+            let tradePrice = (elem[0] === price);
             msg = this.formatting(elem, value, tradePrice);
             color = this.getColor(tradePrice);
-            console.log(color, msg, this.background);
+            //console.log(color, msg, this.background);
         });
     }
     getColor(coloring) {
         if (coloring) {
             return "\x1b[31m";
         }
-        else {
-            return "\x1b[30m";
-        }
+        return "\x1b[30m";
     }
     formatting(row, value, printValue) {
         let msg;
         msg = row[0].toString().padEnd(10);
-        msg += ',';
+        msg += ",";
         msg += row[1].toString().padEnd(10);
         if (printValue) {
             msg += value.toString().padStart(10);
@@ -35,7 +33,7 @@ class PrintDriver {
         return msg;
     }
     printQuoteBook(book) {
-        ;
+        return 1;
     }
 }
 exports.PrintDriver = PrintDriver;
