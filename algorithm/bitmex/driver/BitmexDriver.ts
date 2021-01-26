@@ -1,6 +1,6 @@
 import * as BitMEXClient from "bitmex-realtime-api";
 import { CallbackDriver } from "./CallbackDriver";
-import  * as fs from 'fs';
+import  * as fs from "fs";
 
 export
 class BitmexDriver{
@@ -10,10 +10,10 @@ class BitmexDriver{
 	constructor(callbackDriver: CallbackDriver){
 		const key = this.getKey();
 		this.BitmexClient = new BitMEXClient({apiKeyID: key});
-		this.BitmexClient.addStream("XBTUSD", "trade", (data: [], symbol: string, tablename: string) => {
+		this.BitmexClient.addStream("XBTUSD", "trade", (data: [], symbol: string) => {
 			callbackDriver.tradeInfo(data[data.length-1]);
 		});
-		this.BitmexClient.addStream("XBTUSD", "orderBookL2_25", (data: [], symbol: string, tablename: string) => {
+		this.BitmexClient.addStream("XBTUSD", "orderBookL2_25", (data: [], symbol: string) => {
 			callbackDriver.orderBookInfo(data);
 		});
 	}

@@ -10,6 +10,7 @@ class CallbackDriver {
         this.lastPrice = 0;
         this.lastValue = 0;
         this.quoteListIdx = 0;
+        this.quoteAmountAvg = 40;
         this.orderBook = {};
         this.quoteBook = {};
         this.quoteList = new Array(10000);
@@ -22,8 +23,7 @@ class CallbackDriver {
         let price;
         let size;
         let quote;
-        let row;
-        data.forEach((row, index) => {
+        data.forEach((row) => {
             price = row["price"];
             size = row["size"];
             if (price in this.orderBook) {
@@ -60,26 +60,26 @@ class CallbackDriver {
     }
     resetQuoteBook() {
         for (let i = 0; i < 10; ++i) {
-            let min = 100000000;
+            let min = 1000;
             let key = null;
-            let buf;
+            let rowLength;
             let avg = 0;
             let sorted = this.sortDictByKey(this.quoteBook);
-            for (let j = 0; j < sorted.length; ++j) {
-                buf = sorted[j][1].length;
-                avg += buf;
-                if (buf > this.quoteAmountAvg && this.quoteAmountAvg > 4) {
-                    delete this.quoteBook[sorted[j][0]];
-                    continue;
+            sorted.forEach((elem) => {
+                rowLength = elem[1].length;
+                avg += rowLength;
+                if (rowLength > this.quoteAmountAvg && this.quoteAmountAvg > 4) {
+                    delete this.quoteBook[elem[0]];
+                    return;
                 }
-                if (buf <= min) {
-                    if (buf == min && Math.random() > 0.5) {
-                        continue;
+                if (rowLength <= min) {
+                    if (rowLength == min && Math.random() > 0.5) {
+                        return;
                     }
-                    min = buf;
-                    key = sorted[j][0];
+                    min = rowLength;
+                    key = elem[0];
                 }
-            }
+            });
             this.quoteAmountAvg = avg / sorted.length;
             if (Math.max(this.quoteBook[key]) < 1000000) {
                 delete this.quoteBook[key];
