@@ -1,10 +1,13 @@
+/* configuration */
 const express       = require("express");
-const router        = express.Router();
+
+/* router */
+const routes        = express.Router;
+const router        = routes();
 
 /* DB_Connection */
 const dbconnect     = require("../DB/DB_connect");
-dbconnect();
-// const DB         = dbconnect() => 연결 상태 파악 가능
+dbconnect(); // { const DB = dbconnect() => 연결 상태 파악 가능 }
 
 /* DB_Schema */
 const studentsch    = require("../DB/DB_TestSchema.js");
