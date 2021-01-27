@@ -16,17 +16,17 @@ router.get("/", (req, res) => {
 });
 
 /* localhost:3000/testinput */
-router.get("/testinput", (req, res) => {
-    const newhellbeanssg = new hellbeanssg({name : "bean", age : 27});
-    newhellbeanssg.save(function(error, data){
-        if(error){
-            console.log(error);
-        }else{
-            console.log("Saved!");
-            res.send("saved!");
-        }
-    });
-});
+// router.get("/testinput", (req, res) => {
+//     const newhellbeanssg = new hellbeanssg({Name : "bean", Age : 27});
+//     newhellbeanssg.save(function(error, data){
+//         if(error){
+//             console.log(error);
+//         }else{
+//             console.log("Saved!");
+//             res.send("saved!");
+//         }
+//     });
+// });
 
 /* localhost:3000/DB */
 router.get("/DB", (req, res) => {
