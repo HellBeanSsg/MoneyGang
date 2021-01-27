@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const CallbackDriver_1 = require("./CallbackDriver");
+const CallbackDriver = require("./CallbackDriver");
 const express = require("express");
 const app = express();
 const PORT = 8080;
@@ -9,4 +9,4 @@ app.get("/", (req, res) => {
 });
 app.listen(PORT, () => {
 });
-const test = new CallbackDriver_1.CallbackDriver();
+const test = new CallbackDriver.CallbackDriver();
