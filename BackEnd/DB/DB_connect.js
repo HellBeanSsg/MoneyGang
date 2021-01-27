@@ -37,4 +37,16 @@ const student = mongoose.Schema({
 // Schema를 객체화
 const Student = mongoose.model("member", student);
 
+// Student 객체를 new로 생성
+const newStudent = new Student({name:'Ssg', age:'27'});
+
+// save
+newStudent.save(function(error, data){
+    if(error){
+        console.log(error);
+    }else{
+        console.log('Saved!');
+    }
+});
+
 */

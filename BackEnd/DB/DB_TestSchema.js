@@ -1,9 +1,9 @@
-const mongoose = require("mongoose");
+const Mongoose = require("mongoose");
 
 module.exports = () => {
-    const hellbeanssg = mongoose.Schema({
+    const hellbeanssg = Mongoose.Schema({
         name    : "string",
         age     : "number",
     });
-    return mongoose.model("Member", hellbeanssg);
+    return Mongoose.model("Member", hellbeanssg);
 };
