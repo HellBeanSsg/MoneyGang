@@ -11,7 +11,7 @@ module.exports = () => {
     //     }
     // });
     return mongoose.connection;
-}
+};
 
 /* DB_Connection */
 // mongoose.connect(config.DB_host);
