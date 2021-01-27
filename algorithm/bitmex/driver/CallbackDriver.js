@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CallbackDriver = void 0;
-const BitmexDriver_1 = require("./BitmexDriver");
-const PrintDriver_1 = require("./PrintDriver");
+const BitmexDriver = require("./BitmexDriver");
+const PrintDriver = require("./PrintDriver");
 class CallbackDriver {
     constructor() {
-        this.myDriver = new BitmexDriver_1.BitmexDriver(this);
-        this.printDriver = new PrintDriver_1.PrintDriver();
+        this.myDriver = new BitmexDriver.BitmexDriver(this);
+        this.printDriver = new PrintDriver.PrintDriver();
         this.lastPrice = 0;
         this.lastValue = 0;
         this.quoteAmountAvg = 40;

@@ -5,7 +5,7 @@ class PrintDriver{
 
 	printOrderBook(book: any, price: number, value: number): void{
 		//console.clear();
-		book.forEach((elem)=>{
+		book.forEach((elem) => {
 			let color: String;
 			let msg: String;
 			let tradePrice: boolean = (elem[0] === price);
@@ -34,10 +34,5 @@ class PrintDriver{
 		}
 
 		return msg;
-	}
-
-
-	printQuoteBook(book: Array<Array<any>>): number{
-		return 1;
 	}
 }

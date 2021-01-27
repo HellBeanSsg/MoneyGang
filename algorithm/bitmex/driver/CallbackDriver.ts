@@ -47,7 +47,7 @@ class CallbackDriver{
 		});
 		let sorted: number[][] = this.sortDictByKey(this.orderBook);
 
-		this.printDriver.printOrderBook(sorted, this.lastPrice, this.lastValue);
+		//this.printDriver.printOrderBook(sorted, this.lastPrice, this.lastValue);
 	}
 
 
