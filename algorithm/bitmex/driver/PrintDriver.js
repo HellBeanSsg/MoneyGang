@@ -32,8 +32,5 @@ class PrintDriver {
         }
         return msg;
     }
-    printQuoteBook(book) {
-        return 1;
-    }
 }
 exports.PrintDriver = PrintDriver;

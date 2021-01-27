@@ -36,7 +36,7 @@ class CallbackDriver {
             }
         });
         let sorted = this.sortDictByKey(this.orderBook);
-        this.printDriver.printOrderBook(sorted, this.lastPrice, this.lastValue);
+        //this.printDriver.printOrderBook(sorted, this.lastPrice, this.lastValue);
     }
     addQuote(price, quote) {
         if (price in this.quoteBook) {
