@@ -7,8 +7,8 @@ class CallbackDriver{
 	printDriver: PrintDriver;
 	lastPrice: number;
 	lastValue: number;
-	orderBook: {};
-	quoteBook: {};	
+	orderBook: Map<String, number>;
+	quoteBook: Map<String, Array<number>>;	
 	quoteAmountAvg: number;
 
 	constructor(){
@@ -17,14 +17,14 @@ class CallbackDriver{
 		this.lastPrice = 0;
 		this.lastValue = 0;
 		this.quoteAmountAvg = 40;
-		this.orderBook = {};
-		this.quoteBook = {};
+		this.orderBook = new Map<String, number>();
+		this.quoteBook = new Map<String, Array<number>>();
 	}
 
 
-	tradeInfo(data: {}): void {
-		this.lastPrice = data["price"];
-		this.lastValue = data["size"];
+	tradeInfo(data: Map<String, number>): void {
+		this.lastPrice = data.get("price")!;
+		this.lastValue = data.get("size")!;
 	}
 
 
@@ -36,16 +36,16 @@ class CallbackDriver{
 			price = row["price"];
 			size = row["size"];
 			if (price in this.orderBook) {
-				quote = this.orderBook[String(price)] - size;
+				quote = this.orderBook.get(String(price))! - size;
 			} else {
 				quote = size;
 			}
-			this.orderBook[String(price)] = size;
+			this.orderBook.set(String(price), size);
 			if (quote > 1000) {
 				this.addQuote(price, quote);
 			}
 		});
-		let sorted: number[][] = this.sortDictByKey(this.orderBook);
+		//let sorted: number[][] = this.sortDictByKey(this.orderBook);
 
 		//this.printDriver.printOrderBook(sorted, this.lastPrice, this.lastValue);
 	}
@@ -53,9 +53,9 @@ class CallbackDriver{
 
 	addQuote(price: number, quote: number): void{
 		if (price in this.quoteBook) {
-			this.quoteBook[String(price)].push(quote);
+			this.quoteBook.get(String(price))!.push(quote);
 		} else {
-			this.quoteBook[String(price)] = [quote];
+			this.quoteBook.set(String(price), [quote]);
 		}
 		if (Object.keys(this.quoteBook).length >40){
 			this.resetQuoteBook();
@@ -67,15 +67,15 @@ class CallbackDriver{
 	resetQuoteBook(): void{
 		for (let i=0; i<10; ++i){
 			let min: number = 1000;
-			let key: string = null;
+			let key: string = "";
 			let rowLength: number;
 			let avg: number = 0;
 			let sorted = this.sortDictByKey(this.quoteBook);
-			sorted.forEach((elem) => {
+			sorted.forEach((elem: Array<any>) => {
 				rowLength = elem[1].length;
 				avg += rowLength;
 				if (rowLength > this.quoteAmountAvg && this.quoteAmountAvg > 4){
-					delete this.quoteBook[String(elem[0])];
+					this.quoteBook.delete(String(elem[0]));
 					return;
 				}
 				if (rowLength < min){
@@ -85,20 +85,20 @@ class CallbackDriver{
 			});
 
 			this.quoteAmountAvg = (avg/sorted.length);
-			if (Math.max(this.quoteBook[String(key)]) < 1000000){
-				delete this.quoteBook[String(key)];
+			if (Math.max(...this.quoteBook.get(String(key))!) < 1000000){
+				this.quoteBook.delete(String(key));
 			}
 		}
 
 	}
 
 
-	sortDictByKey(data: {}): any{
+	sortDictByKey(data: Map<String, any>): any{
 		let sorted: any = Object.keys(data).map(function(key) {
-			return [key, data[String(key)]];
+			return [key, data.get(String(key))];
 		});
 
-		sorted.sort(function(first, second) {
+		sorted.sort(function(first: Array<any>, second: Array<any>) {
 			return second[0] - first[0];
 		});
 

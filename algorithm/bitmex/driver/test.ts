@@ -1,11 +1,11 @@
 import {CallbackDriver} from "./CallbackDriver";
 import * as express from "express";
 
-const app = express();
+const app: express.Application = express();
 
-const PORT= 8080;
+const PORT: number = 8080;
 
-app.get("/", (req, res) => {
+app.get("/", (req: express.Request, res: express.Response) => {
 	res.send("Hello World!");
 });
 
