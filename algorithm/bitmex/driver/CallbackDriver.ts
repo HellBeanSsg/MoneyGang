@@ -3,28 +3,28 @@ import { PrintDriver }  from "./PrintDriver";
 
 export
 class CallbackDriver{
-	myDriver: BitmexDriver;
 	printDriver: PrintDriver;
 	lastPrice: number;
 	lastValue: number;
 	orderBook: Map<String, number>;
 	quoteBook: Map<String, Array<number>>;	
 	quoteAmountAvg: number;
+	traceQuoteThreshold: number;
 
 	constructor(){
-		this.myDriver = new BitmexDriver(this);
 		this.printDriver = new PrintDriver();
 		this.lastPrice = 0;
 		this.lastValue = 0;
 		this.quoteAmountAvg = 40;
+		this.traceQuoteThreshold = 100;
 		this.orderBook = new Map<String, number>();
 		this.quoteBook = new Map<String, Array<number>>();
 	}
 
 
 	tradeInfo(data: Map<String, number>): void {
-		this.lastPrice = data.get("price")!;
-		this.lastValue = data.get("size")!;
+		this.lastPrice = data["price"];
+		this.lastValue = data["size"];
 	}
 
 
@@ -41,13 +41,11 @@ class CallbackDriver{
 				quote = size;
 			}
 			this.orderBook.set(String(price), size);
-			if (quote > 1000) {
+			if (quote > this.traceQuoteThreshold) {
 				this.addQuote(price, quote);
 			}
 		});
-		//let sorted: number[][] = this.sortDictByKey(this.orderBook);
-
-		//this.printDriver.printOrderBook(sorted, this.lastPrice, this.lastValue);
+		//this.printDriver.printOrderBook(this.sortDictByKey(this.orderBook), this.lastPrice, this.lastValue);
 	}
 
 
@@ -60,7 +58,7 @@ class CallbackDriver{
 		if (Object.keys(this.quoteBook).length >40){
 			this.resetQuoteBook();
 		}
-		//this.printDriver.printOrderBook(this.sortDictByKey(this.quoteBook), price, quote);
+		this.printDriver.printOrderBook(this.sortDictByKey(this.quoteBook), price, quote);
 	}
 
 
@@ -94,10 +92,7 @@ class CallbackDriver{
 
 
 	sortDictByKey(data: Map<String, any>): any{
-		let sorted: any = Object.keys(data).map(function(key) {
-			return [key, data.get(String(key))];
-		});
-
+		let sorted: any = Array.from(data.keys()).map((key) => [key, data.get(String(key))]);
 		sorted.sort(function(first: Array<any>, second: Array<any>) {
 			return second[0] - first[0];
 		});
