@@ -2,7 +2,7 @@ const mongoose  = require("mongoose");
 const config    = require("../configuration.json");
 
 module.exports = () => {
-    mongoose.connect(config.DB_host);
+    mongoose.connect(config.DB_host, {useNewUrlParser: true, useUnifiedTopology : true});
     // mongoose.connect(config.DB_host, (err)=>{
     //     if(err){
     //         console.log("DB Failed!");
