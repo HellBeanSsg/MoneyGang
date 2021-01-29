@@ -12,6 +12,7 @@ const dbRounter     = require("./Router/access_DB.js")
 /* DB_Connection */
 const dbconnect     = require("./DB/DB_connect.js");
 dbconnect();
+
 /* 
 db 연결 유뮤 파악 가능 
 const db = dbconnect();
