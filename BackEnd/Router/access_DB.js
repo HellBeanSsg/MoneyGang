@@ -130,5 +130,4 @@ router.post("/insert/many", async (req, res) => {
     res.json(result);
 })
 
-
 module.exports = router;

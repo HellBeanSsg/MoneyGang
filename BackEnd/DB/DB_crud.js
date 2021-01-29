@@ -2,7 +2,6 @@
 const studentsch    = require("./DB_TestSchema.js");
 const hellbeanssg   = studentsch();
 
-
 module.exports = () => {
     return {
         find_all : () => {
