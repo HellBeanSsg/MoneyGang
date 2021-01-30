@@ -3,5 +3,5 @@ module.exports = () => {
         testfunction1 : (a) => {
             return a;
         }
-    }
+    };
 };
