@@ -8,7 +8,7 @@ module.exports = () => {
             return new Promise((resolve) => {
                 HellBeanSsg.find({}, {}, (error, member) => {
                     if(error){
-                        resolve(error);
+                        reject(error);
                     }else{
                         resolve(member);
                     }
@@ -19,7 +19,7 @@ module.exports = () => {
             return new Promise((resolve) => {
                 HellBeanSsg.find({Name : arg1}, {}, (error, member) => {
                     if(error){
-                        resolve(error);
+                        reject(error);
                     }else{
                         resolve(member);
                     }
