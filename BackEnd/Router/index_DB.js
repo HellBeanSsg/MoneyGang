@@ -13,20 +13,22 @@ const router        = routes();
  * get test
  */
 router.get("/read1", async (req, res) => {
-    const member = await db.findall();
+    const promise = db.findall();
     let result = [];
-    for(let i = 0; i < Object.keys(member).length; ++i){
-        let index   = parseInt(i);
-        let value1  = member[index].Name;
-        let value2  = member[index].Age;
-        result.push(
-            {
-                Name : value1,
-                Age : value2
-            }
-        );
-    }
-    res.json(result);
+    promise.then(promisevalue => {
+        for(let i = 0; i < Object.keys(promisevalue).length; ++i){
+            let index   = parseInt(i);
+            let value1  = promisevalue[index].Name;
+            let value2  = promisevalue[index].Age;
+            result.push(
+                {
+                    Name : value1,
+                    Age : value2
+                }
+            );
+        }
+        res.json(result);
+    });
 });
 
 /*
