@@ -1,6 +1,6 @@
 /* configuration */
 const express       = require("express");
-const dbcrud       = require("../DB/DB_crud.js");
+const dbcrud        = require("../DB/DB_crud.js");
 const db            = dbcrud();
 
 /* router */
