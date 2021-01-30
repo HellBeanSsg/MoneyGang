@@ -42,7 +42,7 @@ module.exports = () => {
                 let modeling =  {
                                     Name : arg1,
                                     Age : arg2
-                                }
+                                };
                 const newhellbeanssg = new HellBeanSsg(modeling);
                 newhellbeanssg.save(function(error, data){
                     if(error){

@@ -18,8 +18,8 @@ router.get("/read1", async (req, res) => {
     promise.then((promisevalue) => {
         for(let i = 0; i < Object.keys(promisevalue).length; ++i){
             let index   = parseInt(i, 10);
-            let value1  = promisevalue[index].Name;
-            let value2  = promisevalue[index].Age;
+            let value1  = `${promisevalue[index].Name}`;
+            let value2  = `${promisevalue[index].Age}`;
             result.push(
                 {
                     Name : value1,
@@ -41,8 +41,8 @@ router.get("/read2/:Name", async (req, res) => {
     let result = [];
     for(let i = 0; i < Object.keys(member).length; ++i){
         let index   = parseInt(i, 10);
-        let value1  = member[index].Name;
-        let value2  = member[index].Age;
+        let value1  = `${member[index].Name}`;
+        let value2  = `${member[index].Age}`;
         result.push(
             {
                 Name : value1,
@@ -63,8 +63,8 @@ router.post("/read3/", async (req, res) => {
     let result = [];
     for(let i = 0; i < Object.keys(member).length; ++i){
         let index   = parseInt(i, 10);
-        let value1  = member[index].Name;
-        let value2  = member[index].Age;
+        let value1  = `${member[index].Name}`;
+        let value2  = `${member[index].Age}`;
         result.push(
             {
                 Name : value1,
@@ -100,9 +100,8 @@ router.post("/insert/one", async (req, res) => {
 router.post("/insert/many", async (req, res) => {
     let result = [];
     for(let i = 0; i < req.body.length; ++i){
-        let index   = parseInt(i, 10);
-        let value1  = req.body[index].Name;
-        let value2  = req.body[index].Age;
+        let value1  = `${req.body[i].Name}`;
+        let value2  = `${req.body[i].Age}`;
         if(!value1){
             // if Name is empty.
             result.push(["Save Failed : Name is Empty", 
