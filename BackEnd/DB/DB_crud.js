@@ -37,14 +37,13 @@ module.exports = () => {
                 });
             });
         },
-        insert : (Name, Age) => {
+        insert : (arg1, arg2) => {
             return new Promise((resolve) => {
-                const newhellbeanssg = new HellBeanSsg(
-                    {
-                        Name : Name,
-                        Age : Age
-                    }
-                );
+                let modeling =  {
+                                    Name : arg1,
+                                    Age : arg2
+                                }
+                const newhellbeanssg = new HellBeanSsg(modeling);
                 newhellbeanssg.save(function(error, data){
                     if(error){
                         resolve("Save Failed!");
