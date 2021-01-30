@@ -1,7 +1,7 @@
 module.exports = () => {
     return {
-        testfunction1 = () => {
-            
+        testfunction1 : (index, body) => {
+            return body[index];
         }
     }
 }

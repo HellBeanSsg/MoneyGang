@@ -2,6 +2,8 @@
 const express       = require("express");
 const dbcrud        = require("../DB/DB_crud.js");
 const db            = dbcrud();
+const testmodule    = require("../TestFunction.js");
+const testfunc      = testmodule();
 
 /* router */
 const routes        = express.Router;
@@ -18,8 +20,9 @@ router.get("/read1", async (req, res) => {
     promise.then((promisevalue) => {
         for(let i = 0; i < Object.keys(promisevalue).length; ++i){
             let index   = parseInt(i, 10);
-            let value1  = `${promisevalue[index].Name}`;
-            let value2  = `${promisevalue[index].Age}`;
+            let body = testfunc.testfunction1(i, req.body);
+            let value1  = `${body.Name}`;
+            let value2  = `${body.Age}`;
             result.push(
                 {
                     Name : value1,
@@ -129,7 +132,7 @@ router.post("/insert/many", async (req, res) => {
             const promise = db.insert(value1, value2);
             promise.then((promisevalue) => {
                 result.push(promisevalue);
-            });
+            }).catch(result.push(promisevalue));
         }
     }
     res.json(result);

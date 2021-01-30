@@ -27,10 +27,10 @@ module.exports = () => {
             });
         },
         findbyAge : (arg1) => {
-            return new Promise((resolve) => {
+            return new Promise((resolve, reject) => {
                 HellBeanSsg.find({Age : arg1}, {}, (error, member) => {
                     if(error){
-                        resolve(error);
+                        reject(error);
                     }else{
                         resolve(member);
                     }
