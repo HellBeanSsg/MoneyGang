@@ -1,5 +1,4 @@
 /* configuration */
-const { worker } = require("cluster");
 const express       = require("express");
 const dbcrud        = require("../DB/DB_crud.js");
 const db            = dbcrud();
@@ -17,7 +16,7 @@ router.get("/read1", async (req, res) => {
     const promise = db.findall();
     let result = [];
     promise.then((promisevalue) => {
-        promisevalue.forEach(element => {
+        promisevalue.forEach((element) => {
             result.push(
                 {
                     Name : element.Name,
@@ -38,7 +37,7 @@ router.get("/read2/:Name", async (req, res) => {
     const promise = db.findbyname(req.params.Name);
     let result = [];
     promise.then((promisevalue) => {
-        promisevalue.forEach(element => {
+        promisevalue.forEach((element) => {
             result.push(
                 {
                     Name : element.Name,
@@ -57,9 +56,9 @@ router.get("/read2/:Name", async (req, res) => {
  */
 router.post("/read3/", async (req, res) => {
     const promise = db.findbyAge(req.body.Age);
-    let result = []
+    let result = [];
     promise.then((promisevalue) => {
-        promisevalue.forEach(element => {
+        promisevalue.forEach((element) => {
             result.push(
                 {
                     Name : element.Name,
@@ -96,7 +95,7 @@ router.post("/insert/one", async (req, res) => {
  * 동기로 하면 결과를 받아볼수 있다. -> 결과가 리턴될때까지 기다린다.
  */
 router.post("/insert/many", async (req, res) => {
-    req.body.forEach(element => {
+    req.body.forEach((element) => {
         if(!(!element.Age || !element.Name)){
             db.insert(element);
         }
