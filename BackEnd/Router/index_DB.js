@@ -37,20 +37,22 @@ router.get("/read1", async (req, res) => {
  * get test
  */
 router.get("/read2/:Name", async (req, res) => {
-    const member = await db.findbyname(req.params.Name);
-    let result = [];
-    for(let i = 0; i < Object.keys(member).length; ++i){
-        let index   = parseInt(i, 10);
-        let value1  = `${member[index].Name}`;
-        let value2  = `${member[index].Age}`;
-        result.push(
-            {
-                Name : value1,
-                Age : value2
-            }
-        );
-    }
-    res.json(result);
+    const promise = db.findbyname(req.params.Name);
+    let result = []
+    promise.then((promisevalue) => {
+        for(let i = 0; i < Object.keys(promisevalue).length; ++i){
+            let index   = parseInt(i, 10);
+            let value1  = `${promisevalue[index].Name}`;
+            let value2  = `${promisevalue[index].Age}`;
+            result.push(
+                {
+                    Name : value1,
+                    Age : value2
+                }
+            );
+        }
+        res.json(result);
+    });
 });
 
 /*
@@ -59,20 +61,22 @@ router.get("/read2/:Name", async (req, res) => {
  * post test
  */
 router.post("/read3/", async (req, res) => {
-    const member = await db.findbyAge(req.body.Age);
-    let result = [];
-    for(let i = 0; i < Object.keys(member).length; ++i){
-        let index   = parseInt(i, 10);
-        let value1  = `${member[index].Name}`;
-        let value2  = `${member[index].Age}`;
-        result.push(
-            {
-                Name : value1,
-                Age : value2
-            }
-        );
-    }
-    res.json(result);
+    const promise = await db.findbyAge(req.body.Age);
+    let result = []
+    promise.then((promisevalue) => {
+        for(let i = 0; i < Object.keys(member).length; ++i){
+            let index   = parseInt(i, 10);
+            let value1  = `${promisevalue[index].Name}`;
+            let value2  = `${promisevalue[index].Age}`;
+            result.push(
+                {
+                    Name : value1,
+                    Age : value2
+                }
+            );
+        }
+        res.json(result);
+    });
 });
 
 /* 
@@ -84,8 +88,10 @@ router.post("/insert/one", async (req, res) => {
     if(!req.body.Name || !req.body.Age){
         res.send("Not enough information for modeling.");
     }else{
-        const ResultForSave = await db.insert(req.body.Name, req.body.Age);
-        res.json(ResultForSave);
+        const promise = db.insert(req.body.Name, req.body.Age);
+        promise.then((promisevalue) => {
+            res.json(promisevalue);
+        });
     }
 });
 
@@ -120,8 +126,10 @@ router.post("/insert/many", async (req, res) => {
             ]);
         }
         else{
-            const ResultForSave = await db.insert(value1, value2);
-            result.push(ResultForSave);
+            const promise = db.insert(value1, value2);
+            promise.then((promisevalue) => {
+                result.push(promisevalue);
+            });
         }
     }
     res.json(result);
