@@ -16,8 +16,9 @@ router.get("/read1", async (req, res) => {
     const member = await db.findall();
     let result = [];
     for(let i = 0; i < Object.keys(member).length; ++i){
-        let value1  = member[i].Name;
-        let value2  = member[i].Age;
+        let index   = parseInt(i);
+        let value1  = member[index].Name;
+        let value2  = member[index].Age;
         result.push(
             {
                 Name : value1,
@@ -37,8 +38,9 @@ router.get("/read2/:Name", async (req, res) => {
     const member = await db.findbyname(req.params.Name);
     let result = [];
     for(let i = 0; i < Object.keys(member).length; ++i){
-        let value1  = member[i].Name;
-        let value2  = member[i].Age;
+        let index   = parseInt(i);
+        let value1  = member[index].Name;
+        let value2  = member[index].Age;
         result.push(
             {
                 Name : value1,
@@ -58,8 +60,9 @@ router.post("/read3/", async (req, res) => {
     const member = await db.findbyAge(req.body.Age);
     let result = [];
     for(let i = 0; i < Object.keys(member).length; ++i){
-        let value1  = member[i].Name;
-        let value2  = member[i].Age;
+        let index   = parseInt(i);
+        let value1  = member[index].Name;
+        let value2  = member[index].Age;
         result.push(
             {
                 Name : value1,
@@ -95,32 +98,29 @@ router.post("/insert/one", async (req, res) => {
 router.post("/insert/many", async (req, res) => {
     let result = [];
     for(let i = 0; i < req.body.length; ++i){
-        let value1  = member[i].Name;
-        let value2  = member[i].Age;
-        switch(true) {
-            case !value1:
-                // if Name is empty.
-                result.push(["Save Failed : Name is Empty", 
-                    {
-                        Name : "undefined",
-                        Age : value2
-                    }
-                ]);
-                break;
-            case !value2:
-                // if Age is empty.
-                result.push(["Save Failed : Age is Empty", 
-                    {
-                        Name : value1,
-                        Age : "undefined"
-                    }
-                ]);
-                break;
-            case !(!value1 && !value2):
-                const ResultForSave = await db.insert(value1, value2);
-                result.push(ResultForSave);
-                break;
-            default:
+        let index   = parseInt(i);
+        let value1  = req.body[index].Name;
+        let value2  = req.body[index].Age;
+        if(!value1){
+            // if Name is empty.
+            result.push(["Save Failed : Name is Empty", 
+                {
+                    Name : "undefined",
+                    Age : value2
+                }
+            ]);
+        }
+        else if(!value2){
+            result.push(["Save Failed : Age is Empty", 
+                {
+                    Name : value1,
+                    Age : "undefined"
+                }
+            ]);
+        }
+        else{
+            const ResultForSave = await db.insert(value1, value2);
+            result.push(ResultForSave);
         }
     }
     res.json(result);
