@@ -1,9 +1,8 @@
 /* configuration */
+const { worker } = require("cluster");
 const express       = require("express");
 const dbcrud        = require("../DB/DB_crud.js");
 const db            = dbcrud();
-const testmodule    = require("../TestFunction.js");
-const testfunc      = testmodule();
 
 /* router */
 const routes        = express.Router;
@@ -18,18 +17,14 @@ router.get("/read1", async (req, res) => {
     const promise = db.findall();
     let result = [];
     promise.then((promisevalue) => {
-        for(let i = 0; i < Object.keys(promisevalue).length; ++i){
-            let index   = parseInt(i, 10);
-            let body = testfunc.testfunction1(i, req.body);
-            let value1  = `${body.Name}`;
-            let value2  = `${body.Age}`;
+        promisevalue.forEach(element => {
             result.push(
                 {
-                    Name : value1,
-                    Age : value2
+                    Name : element.Name,
+                    Age : element.Age
                 }
             );
-        }
+        });
         res.json(result);
     });
 });
@@ -41,19 +36,16 @@ router.get("/read1", async (req, res) => {
  */
 router.get("/read2/:Name", async (req, res) => {
     const promise = db.findbyname(req.params.Name);
-    let result = []
+    let result = [];
     promise.then((promisevalue) => {
-        for(let i = 0; i < Object.keys(promisevalue).length; ++i){
-            let index   = parseInt(i, 10);
-            let value1  = `${promisevalue[index].Name}`;
-            let value2  = `${promisevalue[index].Age}`;
+        promisevalue.forEach(element => {
             result.push(
                 {
-                    Name : value1,
-                    Age : value2
+                    Name : element.Name,
+                    Age : element.Age
                 }
             );
-        }
+        });
         res.json(result);
     });
 });
@@ -64,20 +56,17 @@ router.get("/read2/:Name", async (req, res) => {
  * post test
  */
 router.post("/read3/", async (req, res) => {
-    const promise = await db.findbyAge(req.body.Age);
+    const promise = db.findbyAge(req.body.Age);
     let result = []
     promise.then((promisevalue) => {
-        for(let i = 0; i < Object.keys(member).length; ++i){
-            let index   = parseInt(i, 10);
-            let value1  = `${promisevalue[index].Name}`;
-            let value2  = `${promisevalue[index].Age}`;
+        promisevalue.forEach(element => {
             result.push(
                 {
-                    Name : value1,
-                    Age : value2
+                    Name : element.Name,
+                    Age : element.Age
                 }
             );
-        }
+        });
         res.json(result);
     });
 });
@@ -107,35 +96,12 @@ router.post("/insert/one", async (req, res) => {
  * 동기로 하면 결과를 받아볼수 있다. -> 결과가 리턴될때까지 기다린다.
  */
 router.post("/insert/many", async (req, res) => {
-    let result = [];
-    for(let i = 0; i < req.body.length; ++i){
-        let value1  = `${req.body[i].Name}`;
-        let value2  = `${req.body[i].Age}`;
-        if(!value1){
-            // if Name is empty.
-            result.push(["Save Failed : Name is Empty", 
-                {
-                    Name : "undefined",
-                    Age : value2
-                }
-            ]);
+    req.body.forEach(element => {
+        if(!(!element.Age || !element.Name)){
+            db.insert(element);
         }
-        else if(!value2){
-            result.push(["Save Failed : Age is Empty", 
-                {
-                    Name : value1,
-                    Age : "undefined"
-                }
-            ]);
-        }
-        else{
-            const promise = db.insert(value1, value2);
-            promise.then((promisevalue) => {
-                result.push(promisevalue);
-            }).catch(result.push(promisevalue));
-        }
-    }
-    res.json(result);
+    });
+    res.json("result");
 });
 
 module.exports = router;
