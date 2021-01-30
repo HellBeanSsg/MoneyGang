@@ -5,7 +5,7 @@ const HellBeanSsg   = studentsch();
 module.exports = () => {
     return {
         findall : () => {
-            return new Promise((resolve) => {
+            return new Promise((resolve, reject) => {
                 HellBeanSsg.find({}, {}, (error, member) => {
                     if(error){
                         reject(error);
@@ -16,7 +16,7 @@ module.exports = () => {
             });
         },
         findbyname : (arg1) => {
-            return new Promise((resolve) => {
+            return new Promise((resolve, reject) => {
                 HellBeanSsg.find({Name : arg1}, {}, (error, member) => {
                     if(error){
                         reject(error);
