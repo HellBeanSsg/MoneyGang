@@ -1,7 +1,7 @@
 /* configuration */
 const express       = require("express");
-const db_crud       = require("../DB/DB_crud.js");
-const db            = db_crud();
+const dbcrud       = require("../DB/DB_crud.js");
+const db            = dbcrud();
 
 /* router */
 const routes        = express.Router;
@@ -13,13 +13,15 @@ const router        = routes();
  * get test
  */
 router.get("/read1", async (req, res) => {
-    const member = await db.find_all();
+    const member = await db.findall();
     let result = [];
     for(let i = 0; i < Object.keys(member).length; ++i){
+        let value1  = member[i].Name;
+        let value2  = member[i].Age;
         result.push(
             {
-                Name : member[i].Name,
-                Age : member[i].Age
+                Name : value1,
+                Age : value2
             }
         );
     }
@@ -32,13 +34,15 @@ router.get("/read1", async (req, res) => {
  * get test
  */
 router.get("/read2/:Name", async (req, res) => {
-    const member = await db.find_by_name(req.params.Name);
+    const member = await db.findbyname(req.params.Name);
     let result = [];
     for(let i = 0; i < Object.keys(member).length; ++i){
+        let value1  = member[i].Name;
+        let value2  = member[i].Age;
         result.push(
             {
-                Name : member[i].Name,
-                Age : member[i].Age
+                Name : value1,
+                Age : value2
             }
         );
     }
@@ -51,13 +55,15 @@ router.get("/read2/:Name", async (req, res) => {
  * post test
  */
 router.post("/read3/", async (req, res) => {
-    const member = await db.find_by_Age(req.body.Age);
+    const member = await db.findbyAge(req.body.Age);
     let result = [];
     for(let i = 0; i < Object.keys(member).length; ++i){
+        let value1  = member[i].Name;
+        let value2  = member[i].Age;
         result.push(
             {
-                Name : member[i].Name,
-                Age : member[i].Age
+                Name : value1,
+                Age : value2
             }
         );
     }
@@ -73,15 +79,8 @@ router.post("/insert/one", async (req, res) => {
     if(!req.body.Name || !req.body.Age){
         res.send("Not enough information for modeling.");
     }else{
-        const ResultForSave = await db.insert_one(req.body.Name, req.body.Age);
-        let result = [];
-        result.push([ResultForSave, 
-            {
-                Name : req.body.Name,
-                Age : req.body.Age
-            }
-        ]);
-        res.json(result);
+        const ResultForSave = await db.insert(req.body.Name, req.body.Age);
+        res.json(ResultForSave);
     }
 });
 
@@ -96,38 +95,35 @@ router.post("/insert/one", async (req, res) => {
 router.post("/insert/many", async (req, res) => {
     let result = [];
     for(let i = 0; i < req.body.length; ++i){
+        let value1  = member[i].Name;
+        let value2  = member[i].Age;
         switch(true) {
-            case !req.body[i].Name:
+            case !value1:
                 // if Name is empty.
                 result.push(["Save Failed : Name is Empty", 
                     {
                         Name : "undefined",
-                        Age : req.body[i].Age
+                        Age : value2
                     }
                 ]);
                 break;
-            case !req.body[i].Age:
+            case !value2:
                 // if Age is empty.
                 result.push(["Save Failed : Age is Empty", 
                     {
-                        Name : req.body[i].Name,
+                        Name : value1,
                         Age : "undefined"
                     }
                 ]);
                 break;
-            case !(!req.body[i].Name && !req.body[i].Age):
-                const ResultForSave = await db.insert_one(req.body[i].Name, req.body[i].Age);
-                result.push([ResultForSave, 
-                    {
-                        Name : req.body[i].Name,
-                        Age : req.body[i].Age
-                    }
-                ]);
+            case !(!value1 && !value2):
+                const ResultForSave = await db.insert(value1, value2);
+                result.push(ResultForSave);
                 break;
             default:
         }
     }
     res.json(result);
-})
+});
 
 module.exports = router;

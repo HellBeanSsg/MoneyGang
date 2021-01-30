@@ -1,12 +1,12 @@
 /* DB_Schema */
 const studentsch    = require("./DB_TestSchema.js");
-const hellbeanssg   = studentsch();
+const HellBeanSsg   = studentsch();
 
 module.exports = () => {
     return {
-        find_all : () => {
-            return new Promise((resolve, reject) => {
-                hellbeanssg.find({}, {}, (error, member) => {
+        findall : () => {
+            return new Promise((resolve) => {
+                HellBeanSsg.find({}, {}, (error, member) => {
                     if(error){
                         resolve(error);
                     }else{
@@ -15,9 +15,9 @@ module.exports = () => {
                 });
             });
         },
-        find_by_name : (arg1) => {
-            return new Promise((resolve, reject) => {
-                hellbeanssg.find({Name : arg1}, {}, (error, member) => {
+        findbyname : (arg1) => {
+            return new Promise((resolve) => {
+                HellBeanSsg.find({Name : arg1}, {}, (error, member) => {
                     if(error){
                         resolve(error);
                     }else{
@@ -26,9 +26,9 @@ module.exports = () => {
                 });
             });
         },
-        find_by_Age : (arg1) => {
-            return new Promise((resolve, reject) => {
-                hellbeanssg.find({Age : arg1}, {}, (error, member) => {
+        findbyAge : (arg1) => {
+            return new Promise((resolve) => {
+                HellBeanSsg.find({Age : arg1}, {}, (error, member) => {
                     if(error){
                         resolve(error);
                     }else{
@@ -37,26 +37,19 @@ module.exports = () => {
                 });
             });
         },
-        insert_one : (Name, Age) => {
-            return new Promise((resolve, reject) => {
-                const newhellbeanssg = new hellbeanssg({Name : Name, Age : Age});
+        insert : (Name, Age) => {
+            return new Promise((resolve) => {
+                const newhellbeanssg = new HellBeanSsg(
+                    {
+                        Name : Name,
+                        Age : Age
+                    }
+                );
                 newhellbeanssg.save(function(error, data){
                     if(error){
                         resolve("Save Failed!");
                     }else{
-                        resolve("Save Success!");
-                    }
-                });
-            });
-        },
-        insert_many : (Name, Age) => {
-            return new Promise((resolve, reject) => {
-                const newhellbeanssg = new hellbeanssg({Name : Name, Age : Age});
-                newhellbeanssg.save(function(error, data){
-                    if(error){
-                        resolve("Save Failed!");
-                    }else{
-                        resolve("Save Success!");
+                        resolve(["Save Success!", data]);
                     }
                 });
             });
