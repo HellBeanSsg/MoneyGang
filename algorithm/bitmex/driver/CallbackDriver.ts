@@ -59,14 +59,14 @@ class CallbackDriver{
 		if (this.quoteList.has(price)) {
 			this.quoteList.set(price, count+1);
 			count = this.quoteList.get(price);
-			if (count == this.traceCountThreshold){
+			if (count === this.traceCountThreshold){
 				let arr: Array<number> = new Array<number>();
 				arr.push(quote);
 				this.quoteBook.set(price, arr);
 			} else if (count > this.traceCountThreshold){
 				this.quoteBook.get(price)!.push(quote);
-				console.clear();
-				this.printDriver.printOrderBook(this.sortDictByKey(this.quoteBook), price, quote);
+				//console.clear();
+				//this.printDriver.printOrderBook(this.sortDictByKey(this.quoteBook), price, quote);
 			}
 		} else {
 			this.quoteList.set(price, 0);
