@@ -6,10 +6,7 @@ class CallbackDriver{
 	lastPrice:						number;
 	lastValue:						number;
 	quoteAmountAvg:					number;
-<<<<<<< HEAD
 	traceCountThreshold:			number;
-=======
->>>>>>> 4f62a3ebe9c60f21767d45a31b5ec489155a02b2
 	traceQuoteThreshold:			number;
 	emergenceQuoteThreshold:		number;
 	printDriver:			   PrintDriver;
@@ -21,18 +18,11 @@ class CallbackDriver{
 		this.lastPrice = 0;
 		this.lastValue = 0;
 		this.quoteAmountAvg = 4;
-<<<<<<< HEAD
 		this.traceCountThreshold = 1;
 		this.traceQuoteThreshold = 100;
 		this.emergenceQuoteThreshold = 10000000;
 		this.printDriver = new PrintDriver();
 		this.quoteList   = new Map<number, number>();
-=======
-		this.traceQuoteThreshold = 100000;
-		this.emergenceQuoteThreshold = 10000000;
-		this.quoteList   = new Map<number, number>();
-		this.printDriver = new PrintDriver();
->>>>>>> 4f62a3ebe9c60f21767d45a31b5ec489155a02b2
 		this.orderBook   = new Map<number, number>();
 		this.quoteBook   = new Map<number, Array<number>>();
 	}
