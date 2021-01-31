@@ -18,8 +18,8 @@ class CallbackDriver{
 		this.lastPrice = 0;
 		this.lastValue = 0;
 		this.quoteAmountAvg = 4;
-		this.traceCountThreshold = 1;
-		this.traceQuoteThreshold = 100;
+		this.traceCountThreshold = 4;
+		this.traceQuoteThreshold = 100000;
 		this.emergenceQuoteThreshold = 10000000;
 		this.printDriver = new PrintDriver();
 		this.quoteList   = new Map<number, number>();
@@ -57,23 +57,23 @@ class CallbackDriver{
 	addQuote(price: number, quote: number): void{
 		let count: number;
 		if (this.quoteList.has(price)) {
-			this.quoteList.set(price, count+1);
 			count = this.quoteList.get(price);
-			if (count == this.traceCountThreshold){
-				let arr: Array<number> = new Array<number>();
-				arr.push(quote);
-				this.quoteBook.set(price, arr);
-			} else if (count > this.traceCountThreshold){
+			if (count < this.traceCountThreshold) {
+				this.quoteList.set(price, count+1);
+			}
+			else if (count == this.traceCountThreshold){
+				this.quoteBook.set(price, new Array<number>(price));
+			} else {
 				this.quoteBook.get(price)!.push(quote);
-				console.clear();
-				this.printDriver.printOrderBook(this.sortDictByKey(this.quoteBook), price, quote);
 			}
 		} else {
-			this.quoteList.set(price, 0);
+			this.quoteList.set(price, 1);
 		}
 		if (this.quoteBook.size >40){
 			this.resetQuoteBook();
 		}
+		console.clear();
+		this.printDriver.printOrderBook(this.sortDictByKey(this.quoteBook), price, quote);
 	}
 
 
