@@ -7,7 +7,7 @@ module.exports = () => {
         Price       : "number",
         OCvalue     : "number"
     },{
-        versionKey : false
+        versionKey : false 
     });
     return mongoose.model("Member", hellbeanssg);
 };
