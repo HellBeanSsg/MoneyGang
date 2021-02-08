@@ -104,7 +104,9 @@ router.post("/insert", async (req, res) => {
     let hour = date[3];
     let minute = date[4];
     let second = date[5];
+
     date = year + "_" + month + "_" + day + "_" + hour + "_" + minute + "_" + second; 
+    
     price = req.body.Price;
 
     /* 서버 실행시 한번만 실행됨 */
