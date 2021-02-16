@@ -68,6 +68,26 @@ Router.post("/read", async (req) => {
                 i++;
         }
     });
+    if (odate.length === 1){
+        new Promise((resolve) => {
+            let result = [];
+            const loop = Number(cyear) - Number(oyear);
+            let index = 0
+            for(let i = 0; i < loop; i++){
+                console.log(index, loop)
+                let year = String(Number(oyear) + i);
+                const promise2 = db.findyear("testmodel", year);
+                promise2.then((data) => {
+                    data.sort(functions.jsonsort);
+                    result.push(functions.pushtojson(data));
+                    if (i === loop - 1){
+                        resolve(result);
+                    }
+                });
+            }
+        }).then((data) => {console.log(data)});
+    }
+    /*
     if (odate.length === 1) {
         // console.log("index_db 실행")
         let promise1 = null;
@@ -88,7 +108,7 @@ Router.post("/read", async (req) => {
         // promise1.then((data) => { console.log(data); });
     }
     else if (odate.length === 2) {
-        let promise1 = null, promise2 = null;
+        let promise1 = null;
         let loop = Number(cmonth) - Number(omonth);
         let year = oyear;
         let month = null;
@@ -96,8 +116,8 @@ Router.post("/read", async (req) => {
             promise1 = new Promise((resolve) => {
                 let result = [];
                 month = Number(omonth) + i;
-                if (month < 10) month = "0" + String(month);
-                promise2 = db.findmonth("testmodel", year, month);
+                if (month < 10) { month = "0" + String(month) };
+                const promise2 = db.findmonth("testmodel", year, month);
                 promise2.then((data) => {
                     data.sort(functions.jsonsort);
                     result.push(functions.pushtojson(data));
@@ -117,7 +137,7 @@ Router.post("/read", async (req) => {
             promise1 = new Promise((resolve) => {
                 let result = [];
                 day = Number(oday) + i;
-                if (day < 10) day = "0" + String(day);
+                if (day < 10) { day = "0" + String(day) };
                 promise2 = db.findday("testmodel", year, month, day);
                 promise2.then((data) => {
                     data.sort(functions.jsonsort);
@@ -198,7 +218,7 @@ Router.post("/read", async (req) => {
             });
         }
         // promise1.then(() => { console.log(result) });
-    }
+    }*/
 });
 
 export default Router;

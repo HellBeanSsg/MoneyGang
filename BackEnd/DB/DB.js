@@ -57,8 +57,8 @@ export default class mongo {
                     if (error) { reject(error); }
                     else { resolve(data); }
                 }
-            )
-        })
+            );
+        });
     }
 
     findmonth(modelName, year, month) {
@@ -76,7 +76,7 @@ export default class mongo {
                     if (error) { reject(error); }
                     else { resolve(data); }
                 }
-            )
+            );
         });
     }
 
@@ -97,7 +97,7 @@ export default class mongo {
                     if (error) { reject(error); }
                     else { resolve(data); }
                 }
-            )
+            );
         });
     }
 
@@ -118,7 +118,7 @@ export default class mongo {
                     if (error) { reject(error); }
                     else { resolve(data); }
                 }
-            )
+            );
         });
     }
 
@@ -140,7 +140,7 @@ export default class mongo {
                     if (error) { reject(error); }
                     else { resolve(data); }
                 }
-            )
+            );
         });
     }
 
@@ -163,7 +163,7 @@ export default class mongo {
                     if (error) { reject(error); }
                     else { resolve(data); }
                 }
-            )
+            );
         });
     }
 
