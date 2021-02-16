@@ -4,7 +4,7 @@ const schema = mongoose.Schema;
 export default class mongo {
     constructor() {
         this.connection = null;
-        this.model = null;
+        this.Model = null;
     }
 
     connect() {
@@ -34,16 +34,16 @@ export default class mongo {
         }, {
             versionKey: false
         });
-        this.model = mongoose.model("member", test);
+        this.Model = mongoose.model("member", test);
     }
 
     getModel() {
-        return this.model;
+        return this.Model;
     }
 
     findyear(year) {
         return new Promise((resolve, reject) => {
-            this.model.find(
+            this.Model.find(
                 {
                     Year: year
                 },
@@ -62,7 +62,7 @@ export default class mongo {
 
     findmonth(year, month) {
         return new Promise((resolve, reject) => {
-            this.model.find(
+            this.Model.find(
                 {
                     Year: year,
                     Month: month
@@ -74,7 +74,7 @@ export default class mongo {
                 }, 
                 (error, data) => {
                     if (error) { reject(error); }
-                    else { resolve(data); console.log(data)}
+                    else { resolve(data); }
                 }
             );
         });
@@ -82,7 +82,7 @@ export default class mongo {
 
     findday(year, month, day) {
         return new Promise((resolve, reject) => {
-            this.model.find(
+            this.Model.find(
                 {
                     Year: year,
                     Month: month,
@@ -103,7 +103,7 @@ export default class mongo {
 
     findhour(year, month, day, hour) {
         return new Promise((resolve, reject) => {
-            this.model.find(
+            this.Model.find(
                 {
                     Year: year,
                     Month: month,
@@ -124,7 +124,7 @@ export default class mongo {
 
     findminute(year, month, day, hour, minute) {
         return new Promise((resolve, reject) => {
-            this.model.find(
+            this.Model.find(
                 {
                     Year: year,
                     Month: month,
@@ -146,7 +146,7 @@ export default class mongo {
 
     findsecond(year, month, day, hour, minute, second) {
         return new Promise((resolve, reject) => {
-            this.model.find(
+            this.Model.find(
                 {
                     Year: year,
                     Month: month,
@@ -180,7 +180,7 @@ export default class mongo {
             Price: price,
             OCvalue: 0
         };
-        const newmodel = new this.model(modeling);
+        const newmodel = new this.Model(modeling);
         newmodel.save((error, data) => {
             if (error) { return (error); }
             else { return (data); }
@@ -200,7 +200,7 @@ export default class mongo {
             Price: price,
             OCvalue: 1
         };
-        const newmodel = new this.model(modeling);
+        const newmodel = new this.Model(modeling);
         newmodel.save((error, data) => {
             if (error) { return (error); }
             else { return (data); }

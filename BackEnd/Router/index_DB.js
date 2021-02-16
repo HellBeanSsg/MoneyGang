@@ -15,10 +15,10 @@ Router.post("/read", async (req, res) => {
     let size = odate.length;
     let oyear = odate.shift(), cyear = cdate.shift();
     let omonth = odate.shift(), cmonth = cdate.shift();
-    let oday = odate.shift(), cday = cdate.shift();
-    let ohour = odate.shift(), chour = cdate.shift();
-    let ominute = odate.shift(), cminute = cdate.shift();
-    let osecond = odate.shift(), csecond = cdate.shift();
+    // let oday = odate.shift(), cday = cdate.shift();
+    // let ohour = odate.shift(), chour = cdate.shift();
+    // let ominute = odate.shift(), cminute = cdate.shift();
+    // let osecond = odate.shift(), csecond = cdate.shift();
     if (size === 1) {
         new Promise((resolve) => {
             let result = [];
@@ -34,21 +34,20 @@ Router.post("/read", async (req, res) => {
                     }
                 });
             }
-        }).then((data) => { res.json(data) });
+        }).then((data) => { res.json(data); });
     }
 
     else if (size === 2) {
-        console.log(oyear, omonth)
         new Promise((resolve) => {
             let result = [];
             let year = oyear;
             const loop = Number(cmonth) - Number(omonth);
             for (let i = 0; i < loop; i++) {
                 let month = Number(omonth) + i;
-                month < 10 ? month = "0" + String(month) : month = String(month);
+                if (month < 10) { month = "0" + String(month); }
+                else { month = String(month); }
                 const promise2 = db.findmonth(year, month);
                 promise2.then((data) => {
-                    console.log(data)
                     data.sort(functions.jsonsort);
                     result.push(functions.pushtojson(data));
                     if (i === loop - 1) {
@@ -56,7 +55,7 @@ Router.post("/read", async (req, res) => {
                     }
                 });
             }
-        }).then((data) => { res.json(data) });
+        }).then((data) => { res.json(data); });
     }
     /*
     else if (odate.length === 3) {
