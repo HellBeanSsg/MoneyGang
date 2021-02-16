@@ -18,74 +18,43 @@ Router.post("/read", async (req) => {
     let osecond = null, csecond = null;
     let odate = req.body.ODate.split("_");
     let cdate = req.body.CDate.split("_");
-    let i = 0;
+    let index = 0;
     odate.forEach((element) => {
-        switch (i) {
-            case 0:
-                oyear = element;
-                break;
-            case 1:
-                omonth = element;
-                break;
-            case 2:
-                oday = element;
-                break;
-            case 3:
-                ohour = element;
-                break;
-            case 4:
-                ominute = element;
-                break;
-            case 5:
-                osecond = element;
-                break;
-            default:
-                i++;
-        }
+        if (index === 0) { oyear = element; }
+        else if (index === 1) { omonth = element; }
+        else if (index === 2) { oday = element; }
+        else if (index === 3) { ohour = element; }
+        else if (index === 4) { ominute = element; }
+        else { osecond = element; }
+        index++;
     });
-    i = 0;
+    index = 0;
     cdate.forEach((element) => {
-        switch (i) {
-            case 0:
-                cyear = element;
-                break;
-            case 1:
-                cmonth = element;
-                break;
-            case 2:
-                cday = element;
-                break;
-            case 3:
-                chour = element;
-                break;
-            case 4:
-                cminute = element;
-                break;
-            case 5:
-                csecond = element;
-                break;
-            default:
-                i++;
-        }
+        if (index === 0) { cyear = element; }
+        else if (index === 1) { cmonth = element; }
+        else if (index === 2) { cday = element; }
+        else if (index === 3) { chour = element; }
+        else if (index === 4) { cminute = element; }
+        else { csecond = element; }
+        index++;
     });
-    if (odate.length === 1){
+    if (odate.length === 1) {
         new Promise((resolve) => {
             let result = [];
             const loop = Number(cyear) - Number(oyear);
-            let index = 0
-            for(let i = 0; i < loop; i++){
+            for (let i = 0; i < loop; i++) {
                 console.log(index, loop)
                 let year = String(Number(oyear) + i);
                 const promise2 = db.findyear("testmodel", year);
                 promise2.then((data) => {
                     data.sort(functions.jsonsort);
                     result.push(functions.pushtojson(data));
-                    if (i === loop - 1){
+                    if (i === loop - 1) {
                         resolve(result);
                     }
                 });
             }
-        }).then((data) => {console.log(data)});
+        }).then((data) => { console.log(data) });
     }
     /*
     if (odate.length === 1) {

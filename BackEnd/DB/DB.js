@@ -167,7 +167,7 @@ export default class mongo {
         });
     }
 
-    opinsert(date, price) {
+    opinsert(modelName, date, price) {
         let parsed = date.split("_");
         let modeling = {
             _id: date,
@@ -187,7 +187,7 @@ export default class mongo {
         });
     }
 
-    cpinsert(date, price) {
+    cpinsert(modelName, date, price) {
         let parsed = date.split("_");
         let modeling = {
             _id: date,
