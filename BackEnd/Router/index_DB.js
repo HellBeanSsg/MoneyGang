@@ -9,43 +9,23 @@ const Router = router();
 
 // let preprice = null, presecond = null, preminute = null;
 
-Router.post("/read", async (req) => {
-    let oyear = null, cyear = null;
-    let omonth = null, cmonth = null;
-    let oday = null, cday = null;
-    let ohour = null, chour = null;
-    let ominute = null, cminute = null;
-    let osecond = null, csecond = null;
+Router.post("/read", async (req, res) => {
     let odate = req.body.ODate.split("_");
     let cdate = req.body.CDate.split("_");
-    let index = 0;
-    odate.forEach((element) => {
-        if (index === 0) { oyear = element; }
-        else if (index === 1) { omonth = element; }
-        else if (index === 2) { oday = element; }
-        else if (index === 3) { ohour = element; }
-        else if (index === 4) { ominute = element; }
-        else { osecond = element; }
-        index++;
-    });
-    index = 0;
-    cdate.forEach((element) => {
-        if (index === 0) { cyear = element; }
-        else if (index === 1) { cmonth = element; }
-        else if (index === 2) { cday = element; }
-        else if (index === 3) { chour = element; }
-        else if (index === 4) { cminute = element; }
-        else { csecond = element; }
-        index++;
-    });
-    if (odate.length === 1) {
+    let size = odate.length;
+    let oyear = odate.shift(), cyear = cdate.shift();
+    let omonth = odate.shift(), cmonth = cdate.shift();
+    let oday = odate.shift(), cday = cdate.shift();
+    let ohour = odate.shift(), chour = cdate.shift();
+    let ominute = odate.shift(), cminute = cdate.shift();
+    let osecond = odate.shift(), csecond = cdate.shift();
+    if (size === 1) {
         new Promise((resolve) => {
             let result = [];
             const loop = Number(cyear) - Number(oyear);
             for (let i = 0; i < loop; i++) {
-                console.log(index, loop)
                 let year = String(Number(oyear) + i);
-                const promise2 = db.findyear("testmodel", year);
+                const promise2 = db.findyear(year);
                 promise2.then((data) => {
                     data.sort(functions.jsonsort);
                     result.push(functions.pushtojson(data));
@@ -54,48 +34,31 @@ Router.post("/read", async (req) => {
                     }
                 });
             }
-        }).then((data) => { console.log(data) });
+        }).then((data) => { res.json(data) });
+    }
+
+    else if (size === 2) {
+        console.log(oyear, omonth)
+        new Promise((resolve) => {
+            let result = [];
+            let year = oyear;
+            const loop = Number(cmonth) - Number(omonth);
+            for (let i = 0; i < loop; i++) {
+                let month = Number(omonth) + i;
+                month < 10 ? month = "0" + String(month) : month = String(month);
+                const promise2 = db.findmonth(year, month);
+                promise2.then((data) => {
+                    console.log(data)
+                    data.sort(functions.jsonsort);
+                    result.push(functions.pushtojson(data));
+                    if (i === loop - 1) {
+                        resolve(result);
+                    }
+                });
+            }
+        }).then((data) => { res.json(data) });
     }
     /*
-    if (odate.length === 1) {
-        // console.log("index_db 실행")
-        let promise1 = null;
-        const loop = Number(cyear) - Number(oyear);
-        let year = null;
-        for (i = 0; i < loop; i++) {
-            promise1 = new Promise((resolve) => {
-                let result = [];
-                year = String(Number(oyear) + i);
-                const promise2 = db.findyear("testmodel", year);
-                promise2.then((data) => {
-                    data.sort(functions.jsonsort);
-                    result.push(functions.pushtojson(data));
-                    resolve(result);
-                });
-            });
-        }
-        // promise1.then((data) => { console.log(data); });
-    }
-    else if (odate.length === 2) {
-        let promise1 = null;
-        let loop = Number(cmonth) - Number(omonth);
-        let year = oyear;
-        let month = null;
-        for (i = 0; i < loop; i++) {
-            promise1 = new Promise((resolve) => {
-                let result = [];
-                month = Number(omonth) + i;
-                if (month < 10) { month = "0" + String(month) };
-                const promise2 = db.findmonth("testmodel", year, month);
-                promise2.then((data) => {
-                    data.sort(functions.jsonsort);
-                    result.push(functions.pushtojson(data));
-                    resolve(result);
-                });
-            });
-        }
-        // promise1.then((data) => { console.log(data) });
-    }
     else if (odate.length === 3) {
         let promise1 = null, promise2 = null;
         let loop = Number(cday) - Number(oday);

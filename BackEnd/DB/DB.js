@@ -4,7 +4,6 @@ const schema = mongoose.Schema;
 export default class mongo {
     constructor() {
         this.connection = null;
-        this.models = {};
         this.model = null;
     }
 
@@ -35,16 +34,16 @@ export default class mongo {
         }, {
             versionKey: false
         });
-        this.models["testmodel"] = mongoose.model("member", test);
+        this.model = mongoose.model("member", test);
     }
 
-    getModel(modelName) {
-        return this.models[modelName];
+    getModel() {
+        return this.model;
     }
 
-    findyear(modelName, year) {
+    findyear(year) {
         return new Promise((resolve, reject) => {
-            this.models[modelName].find(
+            this.model.find(
                 {
                     Year: year
                 },
@@ -61,9 +60,9 @@ export default class mongo {
         });
     }
 
-    findmonth(modelName, year, month) {
+    findmonth(year, month) {
         return new Promise((resolve, reject) => {
-            this.models[modelName].find(
+            this.model.find(
                 {
                     Year: year,
                     Month: month
@@ -72,17 +71,18 @@ export default class mongo {
                     _id: 1,
                     Price: 1,
                     OCvalue: 1
-                }, (error, data) => {
+                }, 
+                (error, data) => {
                     if (error) { reject(error); }
-                    else { resolve(data); }
+                    else { resolve(data); console.log(data)}
                 }
             );
         });
     }
 
-    findday(modelName, year, month, day) {
+    findday(year, month, day) {
         return new Promise((resolve, reject) => {
-            this.models[modelName].find(
+            this.model.find(
                 {
                     Year: year,
                     Month: month,
@@ -101,9 +101,9 @@ export default class mongo {
         });
     }
 
-    findhour(modelName, year, month, day, hour) {
+    findhour(year, month, day, hour) {
         return new Promise((resolve, reject) => {
-            this.models[modelName].find(
+            this.model.find(
                 {
                     Year: year,
                     Month: month,
@@ -122,9 +122,9 @@ export default class mongo {
         });
     }
 
-    findminute(modelName, year, month, day, hour, minute) {
+    findminute(year, month, day, hour, minute) {
         return new Promise((resolve, reject) => {
-            this.models[modelName].find(
+            this.model.find(
                 {
                     Year: year,
                     Month: month,
@@ -144,9 +144,9 @@ export default class mongo {
         });
     }
 
-    findsecond(modelName, year, month, day, hour, minute, second) {
+    findsecond(year, month, day, hour, minute, second) {
         return new Promise((resolve, reject) => {
-            this.models[modelName].find(
+            this.model.find(
                 {
                     Year: year,
                     Month: month,
@@ -167,7 +167,7 @@ export default class mongo {
         });
     }
 
-    opinsert(modelName, date, price) {
+    opinsert(date, price) {
         let parsed = date.split("_");
         let modeling = {
             _id: date,
@@ -180,14 +180,14 @@ export default class mongo {
             Price: price,
             OCvalue: 0
         };
-        const newmodel = new this.models[modelName](modeling);
+        const newmodel = new this.model(modeling);
         newmodel.save((error, data) => {
             if (error) { return (error); }
             else { return (data); }
         });
     }
 
-    cpinsert(modelName, date, price) {
+    cpinsert(date, price) {
         let parsed = date.split("_");
         let modeling = {
             _id: date,
@@ -200,7 +200,7 @@ export default class mongo {
             Price: price,
             OCvalue: 1
         };
-        const newmodel = new this.models[modelName](modeling);
+        const newmodel = new this.model(modeling);
         newmodel.save((error, data) => {
             if (error) { return (error); }
             else { return (data); }
