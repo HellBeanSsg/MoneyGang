@@ -1,15 +1,15 @@
 import { Router as router } from "express";
-import db from "../DB/DB.js";
+import DB from "../DB/DB.js";
 import functions from "../functions.js";
 
-const DB = new db();
-DB.connect();
-DB.setTestModel();
+const db = new DB();
+db.connect();
+db.setTestModel();
 const Router = router();
 
-let preprice = null, presecond = null, preminute = null;
+// let preprice = null, presecond = null, preminute = null;
 
-Router.post("/read", async (req, res) => {
+Router.post("/read", async (req) => {
     let oyear = null, cyear = null;
     let omonth = null, cmonth = null;
     let oday = null, cday = null;
@@ -23,16 +23,22 @@ Router.post("/read", async (req, res) => {
         switch (i) {
             case 0:
                 oyear = element;
+                break;
             case 1:
                 omonth = element;
+                break;
             case 2:
                 oday = element;
+                break;
             case 3:
                 ohour = element;
+                break;
             case 4:
                 ominute = element;
+                break;
             case 5:
                 osecond = element;
+                break;
             default:
                 i++;
         }
@@ -42,30 +48,36 @@ Router.post("/read", async (req, res) => {
         switch (i) {
             case 0:
                 cyear = element;
+                break;
             case 1:
                 cmonth = element;
+                break;
             case 2:
                 cday = element;
+                break;
             case 3:
                 chour = element;
+                break;
             case 4:
                 cminute = element;
+                break;
             case 5:
                 csecond = element;
+                break;
             default:
                 i++;
         }
     });
     if (odate.length === 1) {
-        console.log("index_db 실행")
-        let promise1 = null, promise2 = null;
-        let loop = Number(cyear) - Number(oyear);
+        // console.log("index_db 실행")
+        let promise1 = null;
+        const loop = Number(cyear) - Number(oyear);
         let year = null;
         for (i = 0; i < loop; i++) {
             promise1 = new Promise((resolve) => {
                 let result = [];
                 year = String(Number(oyear) + i);
-                promise2 = DB.findyear("testmodel", year);
+                const promise2 = db.findyear("testmodel", year);
                 promise2.then((data) => {
                     data.sort(functions.jsonsort);
                     result.push(functions.pushtojson(data));
@@ -73,7 +85,7 @@ Router.post("/read", async (req, res) => {
                 });
             });
         }
-        promise1.then((data) => { console.log(data); console.log("index_db 실행 끝"); });
+        // promise1.then((data) => { console.log(data); });
     }
     else if (odate.length === 2) {
         let promise1 = null, promise2 = null;
@@ -85,7 +97,7 @@ Router.post("/read", async (req, res) => {
                 let result = [];
                 month = Number(omonth) + i;
                 if (month < 10) month = "0" + String(month);
-                promise2 = DB.findmonth("testmodel", year, month);
+                promise2 = db.findmonth("testmodel", year, month);
                 promise2.then((data) => {
                     data.sort(functions.jsonsort);
                     result.push(functions.pushtojson(data));
@@ -93,7 +105,7 @@ Router.post("/read", async (req, res) => {
                 });
             });
         }
-        promise1.then((data) => { console.log(data) });
+        // promise1.then((data) => { console.log(data) });
     }
     else if (odate.length === 3) {
         let promise1 = null, promise2 = null;
@@ -106,7 +118,7 @@ Router.post("/read", async (req, res) => {
                 let result = [];
                 day = Number(oday) + i;
                 if (day < 10) day = "0" + String(day);
-                promise2 = DB.findday("testmodel", year, month, day);
+                promise2 = db.findday("testmodel", year, month, day);
                 promise2.then((data) => {
                     data.sort(functions.jsonsort);
                     result.push(functions.pushtojson(data));
@@ -114,7 +126,7 @@ Router.post("/read", async (req, res) => {
                 });
             });
         }
-        promise1.then((data) => { console.log(data) });
+        // promise1.then((data) => { console.log(data) });
     }
     else if (odate.length === 4) {
         let promise1 = null, promise2 = null;
@@ -127,8 +139,8 @@ Router.post("/read", async (req, res) => {
             promise1 = new Promise((resolve) => {
                 let result = [];
                 hour = Number(ohour) + i;
-                if (hour < 10) hour = "0" + String(hour);
-                const promise = DB.findhour("testmodel", year, month, day, hour);
+                if (hour < 10) { hour = "0" + String(hour); }
+                const promise = db.findhour("testmodel", year, month, day, hour);
                 promise.then((data) => {
                     data.sort(functions.jsonsort);
                     result.push(functions.pushtojson(data));
@@ -136,7 +148,7 @@ Router.post("/read", async (req, res) => {
                 });
             });
         }
-        promise1.then((data) => { console.log(data) });
+        // promise1.then((data) => { console.log(data) });
     }
     else if (odate.length === 5) {
         let promise1 = null, promise2 = null;
@@ -150,8 +162,8 @@ Router.post("/read", async (req, res) => {
             promise1 = new Promise((resolve) => {
                 let result = [];
                 minute = Number(ominute) + i;
-                if (minute < 10) minute = "0" + String(minute);
-                promise2 = DB.findminute("testmodel", year, month, day, hour, minute);
+                if (minute < 10) { minute = "0" + String(minute); }
+                promise2 = db.findminute("testmodel", year, month, day, hour, minute);
                 promise2.then((data) => {
                     data.sort(functions.jsonsort);
                     result.push(functions.pushtojson(data));
@@ -159,7 +171,7 @@ Router.post("/read", async (req, res) => {
                 });
             });
         }
-        promise1.then((data) => { console.log(data) });
+        // promise1.then((data) => { console.log(data) });
     }
     else {
         let promise1 = null, promise2 = null;
@@ -174,8 +186,8 @@ Router.post("/read", async (req, res) => {
         for (i = 0; i < loop; i++) {
             promise1 = new Promise((resolve) => {
                 second = Number(osecond) + i;
-                if (second < 10) second = "0" + String(second);
-                promise2 = DB.findsecond("testmodel", year, month, day, hour, minute, second);
+                if (second < 10) { second = "0" + String(second); }
+                promise2 = db.findsecond("testmodel", year, month, day, hour, minute, second);
                 promise2.then((data) => {
                     if (data.length !== 0) {
                         data.sort(functions.jsonsort);
@@ -185,7 +197,7 @@ Router.post("/read", async (req, res) => {
                 });
             });
         }
-        promise1.then(() => { console.log(result) });
+        // promise1.then(() => { console.log(result) });
     }
 });
 

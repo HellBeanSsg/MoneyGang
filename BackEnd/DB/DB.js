@@ -54,10 +54,8 @@ export default class mongo {
                     OCvalue: 1
                 },
                 (error, data) => {
-                    if (error) reject(error);
-                    else {
-                        resolve(data)
-                    };
+                    if (error) { reject(error); }
+                    else { resolve(data); }
                 }
             )
         })
@@ -75,8 +73,8 @@ export default class mongo {
                     Price: 1,
                     OCvalue: 1
                 }, (error, data) => {
-                    if (error) reject(error);
-                    else resolve(data);
+                    if (error) { reject(error); }
+                    else { resolve(data); }
                 }
             )
         });
@@ -96,8 +94,8 @@ export default class mongo {
                     OCvalue: 1
                 },
                 (error, data) => {
-                    if (error) reject(error);
-                    else resolve(data);
+                    if (error) { reject(error); }
+                    else { resolve(data); }
                 }
             )
         });
@@ -117,8 +115,8 @@ export default class mongo {
                     Price: 1,
                     OCvalue: 1
                 }, (error, data) => {
-                    if (error) reject(error);
-                    else resolve(data);
+                    if (error) { reject(error); }
+                    else { resolve(data); }
                 }
             )
         });
@@ -139,8 +137,8 @@ export default class mongo {
                     Price: 1,
                     OCvalue: 1
                 }, (error, data) => {
-                    if (error) reject(error);
-                    else resolve(data);
+                    if (error) { reject(error); }
+                    else { resolve(data); }
                 }
             )
         });
@@ -162,8 +160,8 @@ export default class mongo {
                     Price: 1,
                     OCvalue: 1
                 }, (error, data) => {
-                    if (error) reject(error);
-                    else resolve(data);
+                    if (error) { reject(error); }
+                    else { resolve(data); }
                 }
             )
         });
@@ -184,8 +182,8 @@ export default class mongo {
         };
         const newmodel = new this.models[modelName](modeling);
         newmodel.save((error, data) => {
-            if (error) return (error);
-            else return (data);
+            if (error) { return (error); }
+            else { return (data); }
         });
     }
 
@@ -204,8 +202,8 @@ export default class mongo {
         };
         const newmodel = new this.models[modelName](modeling);
         newmodel.save((error, data) => {
-            if (error) return (error);
-            else return (data);
+            if (error) { return (error); }
+            else { return (data); }
         });
     }
 }
