@@ -152,7 +152,7 @@ Router.post("/read", async (req, res) => {
     }
 });
 
-Router.post("/push", function(req, res) {
+Router.post("/push", (req, res) => {
     let date = req.body.Date.split("_");
     let splitedDate = date;
     let year = splitedDate.shift();
@@ -173,41 +173,13 @@ Router.post("/push", function(req, res) {
             if (preminute !== minute) {
                 let tmpsecond = Number(second) + 60;
                 let tmpdate = year + "_" + month + "_" + day + "_" + hour;
-                while (tmpsecond - 1 > Number(presecond)) {
-                    if (tmpsecond - 1 > 59) {
-                        if (tmpsecond - 61 < 10) {
-                            tmpsecond--;
-                            db.opinsert(tmpdate + "_" + minute + "_0" + (tmpsecond - 60) + "_0", preprice);
-                            db.cpinsert(tmpdate + "_" + minute + "_0" + (tmpsecond - 60) + "_1", preprice);
-                        }
-                        else {
-                            tmpsecond--;
-                            db.opinsert(tmpdate + "_" + minute + "_" + (tmpsecond - 60) + "_0", preprice);
-                            db.cpinsert(tmpdate + "_" + minute + "_" + (tmpsecond - 60) + "_1", preprice);
-                        }
-                    }
-                    else {
-                        tmpsecond--;
-                        db.opinsert(tmpdate + "_" + preminute + "_" + tmpsecond + "_0", preprice);
-                        db.opinsert(tmpdate + "_" + preminute + "_" + tmpsecond + "_1", preprice);
-                    }
-                }
+                functions.ocinsert(1, presecond, tmpsecond, tmpdate, minute, preprice);
             }
             else {
                 let tmpsecond = Number(second);
                 let tmpdate = year + "_" + month + "_" + day + "_" + hour + "_" + minute;
-                while (tmpsecond - 1 > Number(presecond)) {
-                    if (tmpsecond - 1 < 10) {
-                        tmpsecond--;
-                        db.opinsert(tmpdate + "_0" + tmpsecond + "_0", preprice);
-                        db.cpinsert(tmpdate + "_0" + tmpsecond + "_1", preprice);
-                    }
-                    else {
-                        tmpsecond--;
-                        db.opinsert(tmpdate + "_" + tmpsecond + "_0", preprice);
-                        db.cpinsert(tmpdate + "_" + tmpsecond + "_1", preprice);
-                    }
-                }
+                let flag = 0;
+                functions.ocinsert(0, presecond, tmpsecond, tmpdate, minute, preprice);
             }
             db.opinsert(date + "_0", price);
             presecond = second;
