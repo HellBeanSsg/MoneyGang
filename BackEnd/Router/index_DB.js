@@ -155,7 +155,6 @@ Router.post("/read", async (req, res) => {
 Router.post("/push", (req, res) => {
     let date = req.body.Date.split("_");
     let splitedDate = date;
-    let size = date.length;
     let year = splitedDate.shift();
     let month = splitedDate.shift();
     let day = splitedDate.shift();
