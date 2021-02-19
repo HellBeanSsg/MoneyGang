@@ -14,7 +14,7 @@ export default class mongo {
                 useUnifiedTopology: true
             }
         );
-        return mongoose.connection;;
+        return mongoose.connection;
     }
 
     isconnected() {

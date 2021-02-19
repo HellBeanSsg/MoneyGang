@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import DB from "./DB.js"
+import DB from "./DB.js";
 
 const schema = mongoose.Schema;
 

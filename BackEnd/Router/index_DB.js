@@ -152,7 +152,7 @@ Router.post("/read", async (req, res) => {
     }
 });
 
-Router.post("/push", (req, res) => {
+Router.post("/push", function(req, res) {
     let date = req.body.Date.split("_");
     let splitedDate = date;
     let year = splitedDate.shift();
