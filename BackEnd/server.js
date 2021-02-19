@@ -10,7 +10,8 @@ import dbRouter from "./Router/index_DB.js";
 
 if (cluster.isMaster) {
     let numcpus = os.cpus().length / 2;
-    for (let i = 0; i < numcpus; ++i) { cluster.fork(); }
+    cluster.fork();
+    // for (let i = 0; i < numcpus; ++i) { cluster.fork(); }
     // cluster.on("exit", (worker, code, signal) => {
     //     // console.log("Worker terminated" + worker.id);
     //     if (code === 200) { cluster.fork(); }
