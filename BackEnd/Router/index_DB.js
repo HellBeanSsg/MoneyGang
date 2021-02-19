@@ -7,6 +7,7 @@ const Router = router();
 db.setTestModel();
 
 let preprice = null, presecond = null, preminute = null;
+let initialize = 0;
 
 Router.post("/read", async (req, res) => {
     let odate = req.body.ODate.split("_");
@@ -153,8 +154,8 @@ Router.post("/read", async (req, res) => {
 });
 
 Router.post("/push", (req, res) => {
-    let date = req.body.Date.split("_");
-    let splitedDate = date;
+    let date = req.body.Date;
+    let splitedDate = date.split("_");
     let year = splitedDate.shift();
     let month = splitedDate.shift();
     let day = splitedDate.shift();
@@ -162,36 +163,80 @@ Router.post("/push", (req, res) => {
     let minute = splitedDate.shift();
     let second = splitedDate.shift();
     let price = req.body.Price;
-    if (!preprice) preprice = price;
-    if (!preminute) preminute = minute;
-    if (!presecond) {
+    if (!initialize) {
+        preprice = price;
+        preminute = minute;
         presecond = second;
         db.opinsert(date + "_0", price);
+        res.send("OK");
+        return;
     }
-    else {
-        if (presecond !== second) {
-            if (preminute !== minute) {
-                let tmpsecond = Number(second) + 60;
-                let tmpdate = year + "_" + month + "_" + day + "_" + hour;
-                functions.ocinsert(1, presecond, tmpsecond, tmpdate, minute, preprice);
+    if (presecond === second) {
+        db.cpinsert(date + "_1", price);
+        preprice = price;
+        res.send("OK");
+        return;
+    }
+    if (preminute !== minute) {
+        let tmpsecond = Number(second) + 60;
+        let tmpdate = year + "_" + month + "_" + day + "_" + hour;
+        while (tmpsecond - 1 > Number(presecond)) {
+            tmpsecond--;
+            if (tmpsecond > 59 && tmpsecond - 60 < 10) {
+                db.opinsert(tmpdate + "_" + minute + "_0" + (tmpsecond - 60) + "_0", preprice);
+                db.cpinsert(tmpdate + "_" + minute + "_0" + (tmpsecond - 60) + "_1", preprice);
+                continue;
+            }
+            else if (tmpsecond > 59 && tmpsecond - 60 < 10) {
+                db.opinsert(tmpdate + "_" + minute + "_" + (tmpsecond - 60) + "_0", preprice);
+                db.cpinsert(tmpdate + "_" + minute + "_" + (tmpsecond - 60) + "_1", preprice);
+                continue;
+            }
+            db.opinsert(tmpdate + "_" + preminute + "_" + tmpsecond + "_0", preprice);
+            db.opinsert(tmpdate + "_" + preminute + "_" + tmpsecond + "_1", preprice);
+        }
+        /*
+        while (tmpsecond - 1 > Number(presecond)) {
+            if (tmpsecond - 1 > 59) {
+                if (tmpsecond - 61 < 10) {
+                    tmpsecond--;
+                    db.opinsert(tmpdate + "_" + minute + "_0" + (tmpsecond - 60) + "_0", preprice);
+                    db.cpinsert(tmpdate + "_" + minute + "_0" + (tmpsecond - 60) + "_1", preprice);
+                }
+                else {
+                    tmpsecond--;
+                    db.opinsert(tmpdate + "_" + minute + "_" + (tmpsecond - 60) + "_0", preprice);
+                    db.cpinsert(tmpdate + "_" + minute + "_" + (tmpsecond - 60) + "_1", preprice);
+                }
             }
             else {
-                let tmpsecond = Number(second);
-                let tmpdate = year + "_" + month + "_" + day + "_" + hour + "_" + minute;
-                let flag = 0;
-                functions.ocinsert(0, presecond, tmpsecond, tmpdate, minute, preprice);
+                tmpsecond--;
+                db.opinsert(tmpdate + "_" + preminute + "_" + tmpsecond + "_0", preprice);
+                db.opinsert(tmpdate + "_" + preminute + "_" + tmpsecond + "_1", preprice);
             }
-            db.opinsert(date + "_0", price);
-            presecond = second;
-            preminute = minute;
-            preprice = price;
         }
-        else if (presecond === second) {
-            db.cpinsert(date + "_1", price);
-            preprice = price;
-        }
-        res.send("OK");
+        */
     }
+    else {
+        let tmpsecond = Number(second);
+        let tmpdate = year + "_" + month + "_" + day + "_" + hour + "_" + minute;
+        while (tmpsecond - 1 > Number(presecond)) {
+            tmpsecond--;
+            if (tmpsecond < 10) {
+                db.opinsert(tmpdate + "_0" + tmpsecond + "_0", preprice);
+                db.cpinsert(tmpdate + "_0" + tmpsecond + "_1", preprice);
+                continue;
+            }
+            db.opinsert(tmpdate + "_" + tmpsecond + "_0", preprice);
+            db.cpinsert(tmpdate + "_" + tmpsecond + "_1", preprice);
+        }
+    }
+    db.opinsert(date + "_0", price);
+    presecond = second;
+    preminute = minute;
+    preprice = price;
+    res.send("OK");
+    return;
 });
 
 export default Router;

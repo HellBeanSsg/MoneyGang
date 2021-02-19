@@ -10,15 +10,15 @@ import dbRouter from "./Router/index_DB.js";
 
 if (cluster.isMaster) {
     let numcpus = os.cpus().length / 2;
-    for (let i = 0; i < numcpus; ++i) { cluster.fork(); }
-    // cluster.on("exit", (worker, code, signal) => {
-    //     // console.log("Worker terminated" + worker.id);
-    //     if (code === 200) { cluster.fork(); }
-    // });
+    for (let i = 0; i < numcpus; ++i) {
+        cluster.on("exit", (worker, code, signal) => {
+            // console.log("Worker terminated" + worker.id);
+            if (code === 200) { cluster.fork(); }
+        });
+    }
 } else {
     // console.log("Worker created : " + cluster.worker.id);
     const app = express();
-
     app.use(bodyparser.urlencoded({ extended: true }));
     app.use(bodyparser.json());
     app.use(cors());
