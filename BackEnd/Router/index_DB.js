@@ -10,17 +10,17 @@ let preprice = null, presecond = null, preminute = null, preocvalue = null;
 let initialize = false;
 
 let loop1 = (year, month, day, hour, minute, second, price) => {
-    let date = [year, month, day, hour, minute, second].join("_");;
+    let date = [year, month, day, hour, minute, second].join("_");
     let tmpsecond = Number(second) + 60;
     let tmpdate = [year, month, day, hour].join("_");
     while (tmpsecond - 1 >= Number(presecond)) {
         tmpsecond--;
         if (tmpsecond > 59 && tmpsecond - 60 < 10) {
-            db.ocpinsert(tmpdate + "_" + minute + "_0" + (tmpsecond - 60) + "_0", preprice, 0);
-            db.ocpinsert(tmpdate + "_" + minute + "_0" + (tmpsecond - 60) + "_1", preprice, 1);
-            continue;
-        }
-        else if (tmpsecond > 59 && tmpsecond - 60 > 10) {
+            if(tmpsecond - 60 < 10) {
+                db.ocpinsert(tmpdate + "_" + minute + "_0" + (tmpsecond - 60) + "_0", preprice, 0);
+                db.ocpinsert(tmpdate + "_" + minute + "_0" + (tmpsecond - 60) + "_1", preprice, 1);
+                continue;
+            }
             db.ocpinsert(tmpdate + "_" + minute + "_" + (tmpsecond - 60) + "_0", preprice, 0);
             db.ocpinsert(tmpdate + "_" + minute + "_" + (tmpsecond - 60) + "_1", preprice, 1);
             continue;
@@ -28,12 +28,8 @@ let loop1 = (year, month, day, hour, minute, second, price) => {
         db.ocpinsert(tmpdate + "_" + preminute + "_" + tmpsecond + "_0", preprice, 0);
         db.ocpinsert(tmpdate + "_" + preminute + "_" + tmpsecond + "_1", preprice, 1);
     }
-
     db.ocpinsert(date + "_0", price, 0);
-    presecond = second;
-    preminute = minute;
-    preprice = price;
-}
+};
 
 let loop2 = (year, month, day, hour, minute, second) => {
     let tmpsecond = Number(second);
@@ -48,7 +44,7 @@ let loop2 = (year, month, day, hour, minute, second) => {
         db.ocpinsert(tmpdate + "_" + tmpsecond + "_0", preprice, 0);
         db.ocpinsert(tmpdate + "_" + tmpsecond + "_1", preprice, 1);
     }
-}
+};
 
 Router.post("/read/year", async (req, res) => {
     let odate = req.body.ODate.split("_");
@@ -261,6 +257,9 @@ Router.post("/push", (req, res) => {
 
     if (preminute !== minute) {
         loop1(year, month, day, hour, minute, second, price);
+        presecond = second;
+        preminute = minute;
+        preprice = price;
         res.send("OK");
         return;
     }
