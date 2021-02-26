@@ -156,7 +156,7 @@ export default class SecData extends DB {
         });
     }
 
-    opinsert(date, price) {
+    ocpinsert(date, price, ocvalue) {
         let parsed = date.split("_");
         let modeling = {
             _id: date,
@@ -167,27 +167,7 @@ export default class SecData extends DB {
             Minute: parsed[4],
             Second: parsed[5],
             Price: price,
-            OCvalue: 0
-        };
-        const newmodel = new this.Model(modeling);
-        newmodel.save((error, data) => {
-            if (error) { return (error); }
-            else { return (data); }
-        });
-    }
-
-    cpinsert(date, price) {
-        let parsed = date.split("_");
-        let modeling = {
-            _id: date,
-            Year: parsed[0],
-            Month: parsed[1],
-            Day: parsed[2],
-            Hour: parsed[3],
-            Minute: parsed[4],
-            Second: parsed[5],
-            Price: price,
-            OCvalue: 1
+            OCvalue: ocvalue
         };
         const newmodel = new this.Model(modeling);
         newmodel.save((error, data) => {
