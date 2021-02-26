@@ -6,7 +6,7 @@ const db = new DB();
 const Router = router();
 db.setTestModel();
 
-let preprice = null, presecond = null, preminute = null, preocvalue = null;
+let preprice = null, presecond = null, preminute = null;
 let initialize = false;
 
 let loop1 = (year, month, day, hour, minute, second, price) => {
@@ -15,7 +15,7 @@ let loop1 = (year, month, day, hour, minute, second, price) => {
     let tmpdate = [year, month, day, hour].join("_");
     while (tmpsecond - 1 >= Number(presecond)) {
         tmpsecond--;
-        if (tmpsecond > 59 && tmpsecond - 60 < 10) {
+        if (tmpsecond > 59) {
             if(tmpsecond - 60 < 10) {
                 db.ocpinsert(tmpdate + "_" + minute + "_0" + (tmpsecond - 60) + "_0", preprice, 0);
                 db.ocpinsert(tmpdate + "_" + minute + "_0" + (tmpsecond - 60) + "_1", preprice, 1);
@@ -240,7 +240,6 @@ Router.post("/push", (req, res) => {
         preprice = price;
         preminute = minute;
         presecond = second;
-        preocvalue = 0;
         initialize = true;
         db.ocpinsert(date + "_0", price, 0);
         res.send("OK");
@@ -250,7 +249,6 @@ Router.post("/push", (req, res) => {
     if (presecond === second) {
         db.ocpinsert(date + "_1", price, 1);
         preprice = price;
-        preocvalue = 1;
         res.send("OK");
         return;
     }
