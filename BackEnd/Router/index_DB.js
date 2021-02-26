@@ -218,20 +218,24 @@ Router.post("/push", (req, res) => {
             db.ocpinsert(tmpdate + "_" + preminute + "_" + tmpsecond + "_0", preprice, 0);
             db.ocpinsert(tmpdate + "_" + preminute + "_" + tmpsecond + "_1", preprice, 1);
         }
+        db.ocpinsert(date + "_0", price, 0);
+        presecond = second;
+        preminute = minute;
+        preprice = price;
+        res.send("OK");
+        return;
     }
-    else {
-        let tmpsecond = Number(second);
-        let tmpdate = [year, month, day, hour, minute].join("_");
-        while (tmpsecond - 1 > Number(presecond)) {
-            tmpsecond--;
-            if (tmpsecond < 10) {
-                db.ocpinsert(tmpdate + "_0" + tmpsecond + "_0", preprice, 0);
-                db.ocpinsert(tmpdate + "_0" + tmpsecond + "_1", preprice, 1);
-                continue;
-            }
-            db.ocpinsert(tmpdate + "_" + tmpsecond + "_0", preprice, 0);
-            db.pcpinsert(tmpdate + "_" + tmpsecond + "_1", preprice, 1);
+    let tmpsecond = Number(second);
+    let tmpdate = [year, month, day, hour, minute].join("_");
+    while (tmpsecond - 1 > Number(presecond)) {
+        tmpsecond--;
+        if (tmpsecond < 10) {
+            db.ocpinsert(tmpdate + "_0" + tmpsecond + "_0", preprice, 0);
+            db.ocpinsert(tmpdate + "_0" + tmpsecond + "_1", preprice, 1);
+            continue;
         }
+        db.ocpinsert(tmpdate + "_" + tmpsecond + "_0", preprice, 0);
+        db.pcpinsert(tmpdate + "_" + tmpsecond + "_1", preprice, 1);
     }
     db.ocpinsert(date + "_0", price, 0);
     presecond = second;
