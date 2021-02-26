@@ -33,8 +33,8 @@ Router.post("/read/year", async (req, res) => {
 Router.post("/read/month", async (req, res) => {
     let odate = req.body.ODate.split("_");
     let cdate = req.body.CDate.split("_");
-    let oyear = odate.shift(), cyear = cdate.shift();
-    let omonth = odate.shift(), cmonth = cdate.shift();
+    let omonth = odate.pop(), cmonth = cdate.pop();
+    let oyear = odate.pop();
     new Promise((resolve) => {
         let result = [];
         let year = oyear;
@@ -58,9 +58,9 @@ Router.post("/read/month", async (req, res) => {
 Router.post("/read/day", async (req, res) => {
     let odate = req.body.ODate.split("_");
     let cdate = req.body.CDate.split("_");
-    let oyear = odate.shift(), cyear = cdate.shift();
-    let omonth = odate.shift(), cmonth = cdate.shift();
-    let oday = odate.shift(), cday = cdate.shift();
+    let oday = odate.pop(), cday = cdate.pop();
+    let omonth = odate.pop();
+    let oyear = odate.pop();
     new Promise((resolve) => {
         let result = [];
         let year = oyear;
@@ -86,10 +86,10 @@ Router.post("/read/day", async (req, res) => {
 Router.post("/read/hour", async (req, res) => {
     let odate = req.body.ODate.split("_");
     let cdate = req.body.CDate.split("_");
-    let oyear = odate.shift(), cyear = cdate.shift();
-    let omonth = odate.shift(), cmonth = cdate.shift();
-    let oday = odate.shift(), cday = cdate.shift();
-    let ohour = odate.shift(), chour = cdate.shift();
+    let ohour = odate.pop(), chour = cdate.pop();
+    let oday = odate.pop();
+    let omonth = odate.pop();
+    let oyear = odate.pop();
     new Promise((resolve) => {
         let result = [];
         let year = oyear;
@@ -115,11 +115,11 @@ Router.post("/read/hour", async (req, res) => {
 Router.post("/read/minute", async (req, res) => {
     let odate = req.body.ODate.split("_");
     let cdate = req.body.CDate.split("_");
-    let oyear = odate.shift(), cyear = cdate.shift();
-    let omonth = odate.shift(), cmonth = cdate.shift();
-    let oday = odate.shift(), cday = cdate.shift();
-    let ohour = odate.shift(), chour = cdate.shift();
-    let ominute = odate.shift(), cminute = cdate.shift();
+    let ominute = odate.pop(), cminute = cdate.pop();
+    let ohour = odate.pop();
+    let oday = odate.pop();
+    let omonth = odate.pop();
+    let oyear = odate.pop();
     new Promise((resolve) => {
         let result = [];
         let year = oyear;
@@ -146,12 +146,12 @@ Router.post("/read/minute", async (req, res) => {
 Router.post("/read/second", async (req, res) => {
     let odate = req.body.ODate.split("_");
     let cdate = req.body.CDate.split("_");
-    let oyear = odate.shift(), cyear = cdate.shift();
-    let omonth = odate.shift(), cmonth = cdate.shift();
-    let oday = odate.shift(), cday = cdate.shift();
-    let ohour = odate.shift(), chour = cdate.shift();
-    let ominute = odate.shift(), cminute = cdate.shift();
-    let osecond = odate.shift(), csecond = cdate.shift();
+    let osecond = odate.pop(), csecond = cdate.pop();
+    let ominute = odate.pop();
+    let ohour = odate.pop();
+    let oday = odate.pop();
+    let omonth = odate.pop();
+    let oyear = odate.pop();
     new Promise((resolve) => {
         let result = [];
         let year = oyear;
@@ -179,12 +179,12 @@ Router.post("/read/second", async (req, res) => {
 Router.post("/push", (req, res) => {
     let date = req.body.Date;
     let splitedDate = date.split("_");
-    let year = splitedDate.shift();
-    let month = splitedDate.shift();
-    let day = splitedDate.shift();
-    let hour = splitedDate.shift();
-    let minute = splitedDate.shift();
-    let second = splitedDate.shift();
+    let second = splitedDate.pop();
+    let minute = splitedDate.pop();
+    let hour = splitedDate.pop();
+    let day = splitedDate.pop();
+    let month = splitedDate.pop();
+    let year = splitedDate.pop();
     let price = req.body.Price;
     if (!initialize) {
         preprice = price;
