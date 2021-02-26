@@ -6,13 +6,54 @@ const db = new DB();
 const Router = router();
 db.setTestModel();
 
-let preprice = null, presecond = null, preminute = null;
-let initialize = 0;
+let preprice = null, presecond = null, preminute = null, preocvalue = null;
+let initialize = false;
+
+let loop1 = (year, month, day, hour, minute, second, price) => {
+    let date = [year, month, day, hour, minute, second].join("_");;
+    let tmpsecond = Number(second) + 60;
+    let tmpdate = [year, month, day, hour].join("_");
+    while (tmpsecond - 1 >= Number(presecond)) {
+        tmpsecond--;
+        if (tmpsecond > 59 && tmpsecond - 60 < 10) {
+            db.ocpinsert(tmpdate + "_" + minute + "_0" + (tmpsecond - 60) + "_0", preprice, 0);
+            db.ocpinsert(tmpdate + "_" + minute + "_0" + (tmpsecond - 60) + "_1", preprice, 1);
+            continue;
+        }
+        else if (tmpsecond > 59 && tmpsecond - 60 > 10) {
+            db.ocpinsert(tmpdate + "_" + minute + "_" + (tmpsecond - 60) + "_0", preprice, 0);
+            db.ocpinsert(tmpdate + "_" + minute + "_" + (tmpsecond - 60) + "_1", preprice, 1);
+            continue;
+        }
+        db.ocpinsert(tmpdate + "_" + preminute + "_" + tmpsecond + "_0", preprice, 0);
+        db.ocpinsert(tmpdate + "_" + preminute + "_" + tmpsecond + "_1", preprice, 1);
+    }
+
+    db.ocpinsert(date + "_0", price, 0);
+    presecond = second;
+    preminute = minute;
+    preprice = price;
+}
+
+let loop2 = (year, month, day, hour, minute, second) => {
+    let tmpsecond = Number(second);
+    let tmpdate = [year, month, day, hour, minute].join("_");
+    while (tmpsecond - 1 >= Number(presecond)) {
+        tmpsecond--;
+        if (tmpsecond < 10) {
+            db.ocpinsert(tmpdate + "_0" + tmpsecond + "_0", preprice, 0);
+            db.ocpinsert(tmpdate + "_0" + tmpsecond + "_1", preprice, 1);
+            continue;
+        }
+        db.ocpinsert(tmpdate + "_" + tmpsecond + "_0", preprice, 0);
+        db.ocpinsert(tmpdate + "_" + tmpsecond + "_1", preprice, 1);
+    }
+}
 
 Router.post("/read/year", async (req, res) => {
     let odate = req.body.ODate.split("_");
     let cdate = req.body.CDate.split("_");
-    let oyear = odate.shift(), cyear = cdate.shift();
+    let oyear = odate.pop(), cyear = cdate.pop();
     new Promise((resolve) => {
         let result = [];
         const loop = Number(cyear) - Number(oyear);
@@ -20,8 +61,10 @@ Router.post("/read/year", async (req, res) => {
             let year = String(Number(oyear) + i);
             const promise2 = db.findyear(year);
             promise2.then((data) => {
-                data.sort(functions.jsonsort);
-                result.push(functions.pushtojson(data));
+                if (functions.checkresult(data)) {
+                    data.sort(functions.jsonsort);
+                    result.push(functions.pushtojson(data));
+                }
                 if (i === loop - 1) {
                     resolve(result);
                 }
@@ -45,8 +88,10 @@ Router.post("/read/month", async (req, res) => {
             else { month = String(month); }
             const promise2 = db.findmonth(year, month);
             promise2.then((data) => {
-                data.sort(functions.jsonsort);
-                result.push(functions.pushtojson(data));
+                if (functions.checkresult(data)) {
+                    data.sort(functions.jsonsort);
+                    result.push(functions.pushtojson(data));
+                }
                 if (i === loop - 1) {
                     resolve(result);
                 }
@@ -72,8 +117,10 @@ Router.post("/read/day", async (req, res) => {
             else { day = String(day); }
             const promise2 = db.findday(year, month, day);
             promise2.then((data) => {
-                data.sort(functions.jsonsort);
-                result.push(functions.pushtojson(data));
+                if (functions.checkresult(data)) {
+                    data.sort(functions.jsonsort);
+                    result.push(functions.pushtojson(data));
+                }
                 if (i === loop - 1) {
                     resolve(result);
                 }
@@ -102,8 +149,10 @@ Router.post("/read/hour", async (req, res) => {
             else { hour = String(hour); }
             const promise2 = db.findhour(year, month, day, hour);
             promise2.then((data) => {
-                data.sort(functions.jsonsort);
-                result.push(functions.pushtojson(data));
+                if (functions.checkresult(data)) {
+                    data.sort(functions.jsonsort);
+                    result.push(functions.pushtojson(data));
+                }
                 if (i === loop - 1) {
                     resolve(result);
                 }
@@ -133,8 +182,10 @@ Router.post("/read/minute", async (req, res) => {
             else { minute = String(minute); }
             const promise2 = db.findminute(year, month, day, hour, minute);
             promise2.then((data) => {
-                data.sort(functions.jsonsort);
-                result.push(functions.pushtojson(data));
+                if (functions.checkresult(data)) {
+                    data.sort(functions.jsonsort);
+                    result.push(functions.pushtojson(data));
+                }
                 if (i === loop - 1) {
                     resolve(result);
                 }
@@ -166,8 +217,10 @@ Router.post("/read/second", async (req, res) => {
             else { second = String(second); }
             const promise2 = db.findsecond(year, month, day, hour, minute, second);
             promise2.then((data) => {
-                data.sort(functions.jsonsort);
-                result.push(functions.pushtojson(data));
+                if (functions.checkresult(data)) {
+                    data.sort(functions.jsonsort);
+                    result.push(functions.pushtojson(data));
+                }
                 if (i === loop - 1) {
                     resolve(result);
                 }
@@ -186,57 +239,33 @@ Router.post("/push", (req, res) => {
     let month = splitedDate.pop();
     let year = splitedDate.pop();
     let price = req.body.Price;
+
     if (!initialize) {
         preprice = price;
         preminute = minute;
         presecond = second;
+        preocvalue = 0;
+        initialize = true;
         db.ocpinsert(date + "_0", price, 0);
         res.send("OK");
         return;
     }
+
     if (presecond === second) {
         db.ocpinsert(date + "_1", price, 1);
         preprice = price;
+        preocvalue = 1;
         res.send("OK");
         return;
     }
+
     if (preminute !== minute) {
-        let tmpsecond = Number(second) + 60;
-        let tmpdate = [year, month, day, hour].join("_");
-        while (tmpsecond - 1 > Number(presecond)) {
-            tmpsecond--;
-            if (tmpsecond > 59 && tmpsecond - 60 < 10) {
-                db.ocpinsert(tmpdate + "_" + minute + "_0" + (tmpsecond - 60) + "_0", preprice, 0);
-                db.ocpinsert(tmpdate + "_" + minute + "_0" + (tmpsecond - 60) + "_1", preprice, 1);
-                continue;
-            }
-            else if (tmpsecond > 59 && tmpsecond - 60 > 10) {
-                db.ocpinsert(tmpdate + "_" + minute + "_" + (tmpsecond - 60) + "_0", preprice, 0);
-                db.ocpinsert(tmpdate + "_" + minute + "_" + (tmpsecond - 60) + "_1", preprice, 1);
-                continue;
-            }
-            db.ocpinsert(tmpdate + "_" + preminute + "_" + tmpsecond + "_0", preprice, 0);
-            db.ocpinsert(tmpdate + "_" + preminute + "_" + tmpsecond + "_1", preprice, 1);
-        }
-        db.ocpinsert(date + "_0", price, 0);
-        presecond = second;
-        preminute = minute;
-        preprice = price;
+        loop1(year, month, day, hour, minute, second, price);
         res.send("OK");
         return;
     }
-    let tmpsecond = Number(second);
-    let tmpdate = [year, month, day, hour, minute].join("_");
-    while (tmpsecond - 1 > Number(presecond)) {
-        tmpsecond--;
-        if (tmpsecond < 10) {
-            db.ocpinsert(tmpdate + "_0" + tmpsecond + "_0", preprice, 0);
-            db.ocpinsert(tmpdate + "_0" + tmpsecond + "_1", preprice, 1);
-            continue;
-        }
-        db.ocpinsert(tmpdate + "_" + tmpsecond + "_0", preprice, 0);
-        db.pcpinsert(tmpdate + "_" + tmpsecond + "_1", preprice, 1);
-    }
+
+    loop2(year, month, day, hour, minute, second);
     db.ocpinsert(date + "_0", price, 0);
     presecond = second;
     preminute = minute;
