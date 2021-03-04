@@ -1,16 +1,18 @@
 export class Mutex {
   lock: boolean;
+  sleeptime: number;
 
   constructor() {
     this.lock = false;
+    this.sleeptime = 100;
   }
 
   async acquire() {
-    while (true) {
+    for (;;) {
       if (this.lock === false) {
         break;
       }
-      await sleep(100);
+      await sleep(this.sleeptime);
     }
     this.lock = true;
   }
