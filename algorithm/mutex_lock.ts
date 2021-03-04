@@ -1,10 +1,12 @@
+function sleep(delay: number): Promise<any> {
+  return new Promise<any>((res) => setTimeout(res, delay));
+}
+
 export class Mutex {
   lock: boolean;
-  sleeptime: number;
 
   constructor() {
     this.lock = false;
-    this.sleeptime = 100;
   }
 
   async acquire() {
@@ -12,7 +14,7 @@ export class Mutex {
       if (this.lock === false) {
         break;
       }
-      await sleep(this.sleeptime);
+      await sleep(100);
     }
     this.lock = true;
   }
@@ -20,8 +22,4 @@ export class Mutex {
   release(): void {
     this.lock = false;
   }
-}
-
-function sleep(delay: number): Promise<any> {
-  return new Promise<any>((res) => setTimeout(res, delay));
 }
