@@ -7,7 +7,7 @@ export class Mutex {
 
   async acquire() {
     while (true) {
-      if (this.lock == false) {
+      if (this.lock === false) {
         break;
       }
       await sleep(100);
