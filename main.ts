@@ -1,3 +1,3 @@
-import { BitmexDriver } from "driver/BitmexDriver";
+import { BitmexDriver } from "./driver/BitmexDriver";
 
 let driver: BitmexDriver = new BitmexDriver();
